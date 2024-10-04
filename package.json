@@ -1,0 +1,19 @@
+﻿{
+  "name": "com.mastersix.ubimgui",
+  "displayName": "UBImGui",
+  "version": "0.0.1",
+  "unity": "2022.4",
+  "description": "UBImGui (Unity Better ImGui) is a binding of \"Dear ImGui\" for Unity. It allows you to create interfaces by code, in immediate mode, in a simple and intuitive way.",
+  "keywords": [
+    "Dear ImGui",
+    "ImGui",
+    "GUI",
+    "Immediate Mode",
+    "UBImGui"
+  ],
+  "author": {
+    "name": "MasterSix",
+    "email": "igork7silva@gmail.com",
+    "url": "https://github.com/MasterSix997"
+  }
+}
