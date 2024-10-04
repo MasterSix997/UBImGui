@@ -1,0 +1,18 @@
+{
+    "name": "UBImGui.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:1ef274fc3d3bd31498ab3ed8a203f835"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
