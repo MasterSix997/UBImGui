@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -16,9 +15,9 @@ namespace UBImGui
         private bool _isEnabled;
         private Action _layout;
         
-        public static bool IsEnabled => _instance?._isEnabled?? false;
+        internal static bool IsEnabled => _instance?._isEnabled?? false;
         
-        public static event Action Layout
+        internal static event Action Layout
         {
             add
             {
@@ -35,6 +34,8 @@ namespace UBImGui
                 }
             }
         }
+        
+        internal static ImGuiController Controller => _instance?._controller;
 
         public static void Initialize()
         {

@@ -16,6 +16,8 @@ namespace UBImGui
         
         public IntPtr Context { get; private set; }
         
+        public ImGuiTextures Textures => _textures;
+        
         public ImGuiController(Camera camera)
         {
             _inputHandler = new InputManagerHandler();

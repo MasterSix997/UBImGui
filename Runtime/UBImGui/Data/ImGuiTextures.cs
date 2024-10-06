@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ImGuiNET;
+using UBImGui.Utils;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
@@ -12,7 +13,8 @@ namespace UBImGui
     {
         private Texture2D _atlasTexture;
         private int _currentTextureId;
-        private readonly Dictionary<int, Texture> _textures = new Dictionary<int, Texture>();
+        // private readonly Dictionary<int, Texture> _textures = new Dictionary<int, Texture>();
+        private readonly TwoWayDictionary<int, Texture> _textures = new TwoWayDictionary<int, Texture>();
 
         public void UpdateTextures(ImGuiIOPtr io)
         {
@@ -28,8 +30,31 @@ namespace UBImGui
         
         public Texture GetTexture(int id)
         {
-            _textures.TryGetValue(id, out var texture);
-            return texture;
+            return _textures.Contains(id) ? _textures[id] : null;
+        }
+        
+        public int GetTextureId(Texture texture)
+        {
+            return _textures.Contains(texture) ? _textures[texture] : -1;
+        }
+        
+        public IntPtr GetTexturePtr(Texture texture)
+        {
+            return (IntPtr)GetTextureId(texture);
+        }
+        
+        public IntPtr GetTexturePtr(int id)
+        {
+            return _textures.Contains(id) ? (IntPtr)id : IntPtr.Zero;
+        }
+
+        public IntPtr GetOrCreate(Texture texture)
+        {
+            var id = GetTextureId(texture);
+            if (id == -1)
+                id = Bind(texture);
+            
+            return (IntPtr)id;
         }
         
         public void BuildDefaultFont(ImGuiIOPtr io)
