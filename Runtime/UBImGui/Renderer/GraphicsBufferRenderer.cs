@@ -21,7 +21,7 @@ namespace UBImGui
         
         private int[] _drawArgs = { 0, 1, 0, 0, 0 };
 
-        public GraphicsBufferRenderer(ImGuiIOPtr io, ImGuiTextures textures)
+        internal GraphicsBufferRenderer(ImGuiIOPtr io, ImGuiTextures textures)
         {
             _textures = textures;
             io.BackendFlags |= ImGuiBackendFlags.RendererHasVtxOffset;

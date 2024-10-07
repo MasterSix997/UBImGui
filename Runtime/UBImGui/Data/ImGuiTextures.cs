@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using ImGuiNET;
-using UBImGui.Utils;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
@@ -12,12 +12,13 @@ namespace UBImGui
     public class ImGuiTextures : IDisposable
     {
         private Texture2D _atlasTexture;
-        private int _currentTextureId;
-        // private readonly Dictionary<int, Texture> _textures = new Dictionary<int, Texture>();
         private readonly TwoWayDictionary<int, Texture> _textures = new TwoWayDictionary<int, Texture>();
+        private int _currentTextureId;
+        readonly HashSet<IntPtr> _allocatedGlyphRangeArrays = new HashSet<IntPtr>(IntPtrEqualityComparer.Instance);
 
         public void UpdateTextures(ImGuiIOPtr io)
         {
+            _currentTextureId = 0;
             _textures.Clear();
             io.Fonts.SetTexID((IntPtr)Bind(_atlasTexture));
         }
@@ -57,11 +58,36 @@ namespace UBImGui
             return (IntPtr)id;
         }
         
-        public void BuildDefaultFont(ImGuiIOPtr io)
+        // unsafe IntPtr AllocateGlyphRangeArray(in FontConfig fontConfig)
+        // {
+        //     var values = fontConfig.BuildRanges();
+        //     if (values.Count == 0)
+        //         return IntPtr.Zero;
+        //
+        //     int byteCount = sizeof(ushort) * (values.Count + 1); // terminating zero
+        //     var ranges = (ushort*)Util.Allocate(byteCount);
+        //     _allocatedGlyphRangeArrays.Add((IntPtr)ranges);
+        //     for (var i = 0; i < values.Count; ++i)
+        //         ranges[i] = values[i];
+        //     ranges[values.Count] = 0;
+        //     return (IntPtr)ranges;
+        // }
+
+        unsafe void FreeGlyphRangeArrays()
         {
+            foreach (var range in _allocatedGlyphRangeArrays)
+                Util.Free((byte*)range);
+            _allocatedGlyphRangeArrays.Clear();
+        }
+        
+        public unsafe void BuildFontAtlas(ImGuiIOPtr io)
+        {
+            if (io.Fonts.IsBuilt())
+                DestroyFontAtlas(io);
+            
             if (!io.MouseDrawCursor)
                 io.Fonts.Flags |= ImFontAtlasFlags.NoMouseCursors;
-            
+
             io.Fonts.AddFontDefault();
             io.Fonts.Build();
         }
@@ -84,6 +110,14 @@ namespace UBImGui
             for (var y = 0; y < height; ++y)
                 NativeArray<byte>.Copy(srcData, y * stride, dstData, (height - y - 1) * stride, stride);
             _atlasTexture.Apply();
+        }
+        
+        public unsafe void DestroyFontAtlas(ImGuiIOPtr io)
+        {
+            FreeGlyphRangeArrays();
+
+            io.Fonts.Clear();
+            io.NativePtr->FontDefault = default;
         }
 
         public void Dispose()

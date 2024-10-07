@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d10de0c4c2ae4852902905ccd9b57019, type: 3}
+  m_Name: DEFAULT Settings
+  m_EditorClassIdentifier: 
+  styleAsset: {fileID: 11400000, guid: add6a5977e6e7704586c563789be44a6, type: 2}
+  renderInFront: 0
+  iniSettings: 
+  iniSettingsSize: 0

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace UBImGui.Utils
+namespace UBImGui
 {
-    public class TwoWayDictionary<T1, T2>
+    internal class TwoWayDictionary<T1, T2>
     {
         Dictionary<T1, T2> _forwards = new Dictionary<T1, T2>();
         Dictionary<T2, T1> _backwards = new Dictionary<T2, T1>();

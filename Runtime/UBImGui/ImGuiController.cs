@@ -12,11 +12,12 @@ namespace UBImGui
         private IImGuiRenderer _renderer;
         private ImGuiTextures _textures;
         private ClipboardHandler _clipboardHandler;
+        private UBImGuiSettings _settings;
         private Camera _camera;
         
         public IntPtr Context { get; private set; }
         
-        public ImGuiTextures Textures => _textures;
+        internal ImGuiTextures Textures => _textures;
         
         public ImGuiController(Camera camera)
         {
@@ -32,12 +33,17 @@ namespace UBImGui
         {
             Context = ImGui.CreateContext();
             ImGui.SetCurrentContext(Context);
-            ImGui.StyleColorsDark();
+            // ImGui.StyleColorsDark();
             
             var io = ImGui.GetIO();
+
+            _settings = UBImGuiSettingsPersistent.GetSettings();
+            _settings.ApplyTo(ImGui.GetStyle());
+            if (_settings.iniSettingsSize > 0)
+                ImGui.LoadIniSettingsFromMemory(_settings.iniSettings, _settings.iniSettingsSize);
             
             _inputHandler.Initialize(io);
-            _textures.BuildDefaultFont(io);
+            _textures.BuildFontAtlas(io);
             _textures.BuildAtlasTexture(io);
             _renderer = new GraphicsBufferRenderer(io, _textures);
             _clipboardHandler.Assign(io);
@@ -68,6 +74,13 @@ namespace UBImGui
             io.DisplaySize = new Vector2(_camera.pixelRect.width, _camera.pixelRect.height);
             
             io.DeltaTime = Time.deltaTime;
+
+            if (io.WantSaveIniSettings)
+            {
+                _settings.iniSettings = ImGui.SaveIniSettingsToMemory(out var size);
+                _settings.iniSettingsSize = size;
+                io.WantSaveIniSettings = false;
+            }
         }
 
         public void Render(CommandBufferWrapper cmd, Camera camera)
