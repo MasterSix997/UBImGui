@@ -5,7 +5,7 @@ using UnityEngine.Rendering;
 namespace UBImGui
 {
     [StructLayout(LayoutKind.Sequential)]
-    public struct CommandBufferWrapper
+    public readonly struct CommandBufferWrapper
     {
         private readonly CommandBuffer _cmd;
 #if PACKAGE_UNIVERSAL_RP_17_0_0_OR_NEWER

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace UBImGui
 {
-    [CreateAssetMenu(fileName = "ImGui Style", menuName = "Dear ImGui/Style")]
+    [CreateAssetMenu(fileName = "ImGui Style", menuName = "UB ImGui/Style")]
     public class ImGuiStyleAsset : ScriptableObject
     {
         public float Alpha;

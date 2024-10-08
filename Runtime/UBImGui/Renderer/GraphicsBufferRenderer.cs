@@ -74,13 +74,13 @@ namespace UBImGui
             }
         }
 
-        public void Render(CommandBufferWrapper cmd, ImDrawDataPtr drawData, Vector2 frameBufferSize)
+        public void Render(in CommandBufferWrapper cmd, ImDrawDataPtr drawData, Vector2 frameBufferSize)
         {
             var prevTextureId = System.IntPtr.Zero;
             var clipOffset = new Vector4(drawData.DisplayPos.x, drawData.DisplayPos.y, drawData.DisplayPos.x, drawData.DisplayPos.y);
             var clipScale = new Vector4(drawData.FramebufferScale.x, drawData.FramebufferScale.y, drawData.FramebufferScale.x, drawData.FramebufferScale.y);
 
-            _material.SetBuffer(VertexProperty, _vertexBuffer);                          // bind vertex buffer
+            _material.SetBuffer(VertexProperty, _vertexBuffer);
 
             cmd.SetViewport(new Rect(0f, 0f, frameBufferSize.x, frameBufferSize.y));
             cmd.SetViewProjectionMatrices(
@@ -96,8 +96,7 @@ namespace UBImGui
                 {
                     var drawCmd = drawList.CmdBuffer[i];
                     // TODO: user callback in drawCmd.UserCallback & drawCmd.UserCallbackData
-
-                    // project scissor rectangle into framebuffer space and skip if fully outside
+                    
                     var drawCmdU = new Vector4(drawCmd.ClipRect.x, drawCmd.ClipRect.y, drawCmd.ClipRect.z, drawCmd.ClipRect.w);
                     var clip = Vector4.Scale(drawCmdU - clipOffset, clipScale);
                     if (clip.x >= frameBufferSize.x || clip.y >= frameBufferSize.y || clip.z < 0f || clip.w < 0f) continue;
@@ -107,7 +106,7 @@ namespace UBImGui
                         _properties.SetTexture(TextureProperty, _textures.GetTexture((int)(prevTextureId = drawCmd.TextureId)));
                     }
 
-                    _properties.SetInt(BaseVertexProperty, vtxOffset + (int)drawCmd.VtxOffset); // base vertex location not automatically added to SV_VertexID
+                    _properties.SetInt(BaseVertexProperty, vtxOffset + (int)drawCmd.VtxOffset);
                     cmd.EnableScissorRect(new Rect(clip.x, frameBufferSize.y - clip.w, clip.z - clip.x, clip.w - clip.y)); // invert y
                     cmd.DrawProceduralIndirect(_indexBuffer, Matrix4x4.identity, _material, -1, MeshTopology.Triangles, _argsBuffer, argOffset, _properties);
                 }

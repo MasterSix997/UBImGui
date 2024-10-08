@@ -14,6 +14,56 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   styleAsset: {fileID: 11400000, guid: add6a5977e6e7704586c563789be44a6, type: 2}
   fontAsset: {fileID: 11400000, guid: bc071f1819ea29f4b83a498ada5c8bce, type: 2}
-  renderInFront: 0
-  iniSettings: 
-  iniSettingsSize: 0
+  cursorAsset: {fileID: 11400000, guid: e1576bae06e2097498732d9b5be847cf, type: 2}
+  renderInFront: 1
+  iniSettings: '[Window][Debug##Default]
+
+    Pos=60,60
+
+    Size=400,400
+
+    Collapsed=0
+
+
+    [Window][Dear
+    ImGui Style Editor]
+
+    Pos=60,60
+
+    Size=482,730
+
+    Collapsed=0
+
+
+    [Window][Dear
+    ImGui Demo]
+
+    Pos=903,110
+
+    Size=478,604
+
+    Collapsed=0
+
+
+    [Window][Test
+    Window]
+
+    Pos=638,104
+
+    Size=176,198
+
+    Collapsed=0
+
+
+    [Table][0xC9935533,3]
+
+    Column
+    0  Weight=1.0000
+
+    Column 1  Weight=1.0000
+
+    Column 2  Weight=1.0000
+
+
+'
+  iniSettingsSize: 350

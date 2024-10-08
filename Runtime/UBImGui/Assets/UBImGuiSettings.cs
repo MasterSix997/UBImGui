@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace UBImGui
 {
-    [CreateAssetMenu(fileName = "UBImGui Settings", menuName = "Dear ImGui/Settings")]
+    [CreateAssetMenu(fileName = "UBImGui Settings", menuName = "UB ImGui/Settings")]
     public class UBImGuiSettings : ScriptableObject
     {
         public ImGuiStyleAsset styleAsset;

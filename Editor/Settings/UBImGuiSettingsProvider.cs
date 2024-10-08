@@ -191,7 +191,7 @@ namespace UBImGui.Editor
         [SettingsProvider]
         public static SettingsProvider CreateSettingsProvider()
         {
-            return new UBImGuiSettingsProvider("Project/Dear ImGui")
+            return new UBImGuiSettingsProvider("Project/UB ImGui")
             {
                 keywords = new[] { "draw", "debug", "drawing", "imgui", "ui", "Dear", "UB", "Unity", "Best"}
             };

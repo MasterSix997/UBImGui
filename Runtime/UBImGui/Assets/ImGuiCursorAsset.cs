@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace UBImGui
 {
-    [CreateAssetMenu(fileName = "ImGui Cursor", menuName = "Dear ImGui/Cursor")]
+    [CreateAssetMenu(fileName = "ImGui Cursor", menuName = "UB ImGui/Cursor")]
     public class ImGuiCursorAsset : ScriptableObject
     {
         [Serializable]
@@ -17,7 +17,7 @@ namespace UBImGui
         [Tooltip("Default.")]
         public CursorShape Arrow;
 
-        [Tooltip("When hovering over InputText, etc.")]
+        [Tooltip("When hovering over InputText.")]
         public CursorShape TextInput;
 
         [Tooltip("(Unused by ImGui functions)")]
@@ -38,7 +38,7 @@ namespace UBImGui
         [Tooltip("(Unused by ImGui functions. Use for e.g. hyperlinks)")]
         public CursorShape Hand;
 
-        [Tooltip("When hovering something with disabled interaction. Usually a crossed circle.")]
+        [Tooltip("When hovering something with disabled interaction.")]
         public CursorShape NotAllowed;
 
         public ref CursorShape this[ImGuiMouseCursor cursor]

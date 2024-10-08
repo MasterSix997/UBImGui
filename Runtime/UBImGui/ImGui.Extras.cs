@@ -9,12 +9,20 @@ namespace ImGuiNET
     {
         public static event Action Layout
         {
-            add => ImGuiBehaviour.Layout += value;
-            remove => ImGuiBehaviour.Layout -= value;
+            add
+            {
+                ImGuiBehaviour.Initialize();
+                ImGuiController.CurrentController.Layout += value;
+            }
+            remove
+            {
+                if (ImGuiController.CurrentController != null)
+                    ImGuiController.CurrentController.Layout -= value;
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IntPtr ImageId(Texture texture) => ImGuiBehaviour.Controller.Textures.GetOrCreate(texture);
+        public static IntPtr ImageId(Texture texture) => ImGuiController.CurrentController.Textures.GetOrCreate(texture);
 
         public static void Image(Texture texture)
         {

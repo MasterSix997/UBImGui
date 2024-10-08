@@ -15,9 +15,15 @@ namespace UBImGui
         private UBImGuiSettings _settings;
         private Camera _camera;
         
+        internal event Action Layout;
+        
+        public static ImGuiController CurrentController { get; private set; }
+        public static bool HasController => CurrentController != null;
         public IntPtr Context { get; private set; }
         
         internal ImGuiTextures Textures => _textures;
+        internal UBImGuiSettings Settings => _settings;
+        internal Camera CameraToRender => _camera;
         
         public ImGuiController(Camera camera)
         {
@@ -72,6 +78,8 @@ namespace UBImGui
             _frameBegun = true;
             
             ImGui.NewFrame();
+            
+            Layout?.Invoke();
         }
 
         private void SetPerFrameImGuiData()
@@ -89,7 +97,7 @@ namespace UBImGui
             }
         }
 
-        public void Render(CommandBufferWrapper cmd, Camera camera)
+        public void Render(in CommandBufferWrapper cmd, Camera camera)
         {
             if(_camera != camera)
                 return;
@@ -109,6 +117,12 @@ namespace UBImGui
             _renderer.Render(cmd, drawData, frameBufferSize);
         }
 
+        public void MakeCurrent()
+        {
+            CurrentController = this;
+            ImGui.SetCurrentContext(Context);
+        }
+
         public void Dispose()
         {
             var io = ImGui.GetIO();
@@ -116,8 +130,10 @@ namespace UBImGui
             _renderer.Dispose();
             _clipboardHandler.Unset(io);
             _clipboardHandler.Dispose();
+            Layout = null;
             ImGui.DestroyContext(Context);
             Context = IntPtr.Zero;
+            CurrentController = null;
         }
     }
 }
