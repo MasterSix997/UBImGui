@@ -1,7 +1,7 @@
 ﻿using System;
 using ImGuiNET;
+using NUnit.Framework;
 using UnityEngine;
-
 namespace UBImGui
 {
     public class ImGuiController : IDisposable
@@ -43,13 +43,14 @@ namespace UBImGui
                 ImGui.LoadIniSettingsFromMemory(_settings.iniSettings, _settings.iniSettingsSize);
             
             _inputHandler.Initialize(io);
-            _textures.BuildFontAtlas(io);
+            _textures.BuildFontAtlas(io, _settings.fontAsset);
             _textures.BuildAtlasTexture(io);
             _renderer = new GraphicsBufferRenderer(io, _textures);
             _clipboardHandler.Assign(io);
             
             ImGui.NewFrame();
             _frameBegun = true;
+            
         }
 
         public void NewFrame()
@@ -73,7 +74,7 @@ namespace UBImGui
             var io = ImGui.GetIO();
             io.DisplaySize = new Vector2(_camera.pixelRect.width, _camera.pixelRect.height);
             
-            io.DeltaTime = Time.deltaTime;
+            io.DeltaTime = Time.unscaledDeltaTime;
 
             if (io.WantSaveIniSettings)
             {

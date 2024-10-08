@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using System.IO;
 using ImGuiNET;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
+using Application = UnityEngine.Device.Application;
 using Object = UnityEngine.Object;
 
 namespace UBImGui
@@ -58,20 +59,20 @@ namespace UBImGui
             return (IntPtr)id;
         }
         
-        // unsafe IntPtr AllocateGlyphRangeArray(in FontConfig fontConfig)
-        // {
-        //     var values = fontConfig.BuildRanges();
-        //     if (values.Count == 0)
-        //         return IntPtr.Zero;
-        //
-        //     int byteCount = sizeof(ushort) * (values.Count + 1); // terminating zero
-        //     var ranges = (ushort*)Util.Allocate(byteCount);
-        //     _allocatedGlyphRangeArrays.Add((IntPtr)ranges);
-        //     for (var i = 0; i < values.Count; ++i)
-        //         ranges[i] = values[i];
-        //     ranges[values.Count] = 0;
-        //     return (IntPtr)ranges;
-        // }
+        unsafe IntPtr AllocateGlyphRangeArray(in FontSettings fontSettings)
+        {
+            var values = fontSettings.BuildRanges();
+            if (values.Count == 0)
+                return IntPtr.Zero;
+        
+            int byteCount = sizeof(ushort) * (values.Count + 1); // terminating zero
+            var ranges = (ushort*)Util.Allocate(byteCount);
+            _allocatedGlyphRangeArrays.Add((IntPtr)ranges);
+            for (var i = 0; i < values.Count; ++i)
+                ranges[i] = values[i];
+            ranges[values.Count] = 0;
+            return (IntPtr)ranges;
+        }
 
         unsafe void FreeGlyphRangeArrays()
         {
@@ -80,14 +81,29 @@ namespace UBImGui
             _allocatedGlyphRangeArrays.Clear();
         }
         
-        public unsafe void BuildFontAtlas(ImGuiIOPtr io)
+        public unsafe void BuildFontAtlas(ImGuiIOPtr io, in ImGuiFontAsset fontAsset = null)
         {
             if (io.Fonts.IsBuilt())
                 DestroyFontAtlas(io);
             
             if (!io.MouseDrawCursor)
                 io.Fonts.Flags |= ImFontAtlasFlags.NoMouseCursors;
+            
+            if (fontAsset && fontAsset.fontSettings.Length > 0)
+            {
+                foreach (var fontSetting in fontAsset.fontSettings)
+                {
+                    var fontPath = Path.Combine(Application.streamingAssetsPath, fontSetting.fontPath);
+                    if (!File.Exists(fontPath))
+                    {
+                        Debug.LogError($"Font file not found: {fontPath}");
+                        continue;
+                    }
 
+                    io.Fonts.AddFontFromFileTTF(fontPath, fontSetting.sizeInPixels, null, AllocateGlyphRangeArray(fontSetting));
+                }
+            }
+            
             io.Fonts.AddFontDefault();
             io.Fonts.Build();
         }

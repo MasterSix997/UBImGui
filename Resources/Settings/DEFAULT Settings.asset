@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: DEFAULT Settings
   m_EditorClassIdentifier: 
   styleAsset: {fileID: 11400000, guid: add6a5977e6e7704586c563789be44a6, type: 2}
+  fontAsset: {fileID: 11400000, guid: bc071f1819ea29f4b83a498ada5c8bce, type: 2}
   renderInFront: 0
   iniSettings: 
   iniSettingsSize: 0

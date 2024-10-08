@@ -43,14 +43,13 @@ namespace UBImGui.Editor
             var settingsSection = new ScrollView(ScrollViewMode.VerticalAndHorizontal);
             rootElement.Add(settingsSection);
             var settingsPersistent = UBImGuiSettingsPersistent.GetOrCreateSettingsPersistent();
-            
+
             var settingsFoldout = new Foldout
             {
-                text = "Settings",
-                viewDataKey = "UBImGui.SettingsFoldout"
+                text = "Settings"
             };
 
-            var settingsPicker = new ObjectField("Settings Asset");
+            var settingsPicker = new ObjectField();
             settingsPicker.objectType = typeof(UBImGuiSettings);
             settingsPicker.value = settingsPersistent.settings;
             settingsPicker.RegisterValueChangedCallback(evt =>
@@ -108,10 +107,10 @@ namespace UBImGui.Editor
             var styleFoldout = new Foldout
             {
                 text = "Style",
-                viewDataKey = "UBImGui.StyleFoldout"
+                value = false
             };
 
-            var stylePicker = new ObjectField("Style Asset");
+            var stylePicker = new ObjectField();
             stylePicker.objectType = typeof(ImGuiStyleAsset);
             stylePicker.value = settings.styleAsset;
             stylePicker.RegisterValueChangedCallback(evt =>
@@ -141,6 +140,7 @@ namespace UBImGui.Editor
             //Settings
             var iterator = new SerializedObject(settings).GetIterator();
             iterator.NextVisible(true);
+            iterator.NextVisible(false);
             while (iterator.NextVisible(false))
             {
                 var propertyField = new PropertyField(iterator, iterator.displayName);
@@ -171,7 +171,7 @@ namespace UBImGui.Editor
                     maxHeight = 500,
                     backgroundColor = new Color(0, 0, 0, 0.1f)
                 },
-                viewDataKey = "UBImGui.ColorsFoldout"
+                value = false
             };
             root.Add(colorsFoldout);
             

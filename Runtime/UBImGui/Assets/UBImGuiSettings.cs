@@ -7,6 +7,7 @@ namespace UBImGui
     public class UBImGuiSettings : ScriptableObject
     {
         public ImGuiStyleAsset styleAsset;
+        public ImGuiFontAsset fontAsset;
         public bool renderInFront;
         
         [TextArea(3, 20)]
