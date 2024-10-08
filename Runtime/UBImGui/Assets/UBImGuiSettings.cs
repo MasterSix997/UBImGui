@@ -8,6 +8,7 @@ namespace UBImGui
     {
         public ImGuiStyleAsset styleAsset;
         public ImGuiFontAsset fontAsset;
+        public ImGuiCursorAsset cursorAsset;
         public bool renderInFront;
         
         [TextArea(3, 20)]
@@ -31,15 +32,16 @@ namespace UBImGui
             // fontAsset.Res
         }
         
-        public static UBImGuiSettings Default()
+        public static UBImGuiSettings CreateTemporary()
         {
             var asset = CreateInstance<UBImGuiSettings>();
-            asset.IsDefault = true;
+            asset.IsTemp = true;
             asset.styleAsset = ImGuiStyleAsset.Default();
             return asset;
         }
 
         internal bool IsDefault;
+        internal bool IsTemp;
         internal bool IsDirt;
     }
 }

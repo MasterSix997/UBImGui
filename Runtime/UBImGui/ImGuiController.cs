@@ -21,7 +21,6 @@ namespace UBImGui
         
         public ImGuiController(Camera camera)
         {
-            _inputHandler = new InputManagerHandler();
             _textures = new ImGuiTextures();
             _camera = camera;
             _clipboardHandler = new ClipboardHandler();
@@ -33,7 +32,6 @@ namespace UBImGui
         {
             Context = ImGui.CreateContext();
             ImGui.SetCurrentContext(Context);
-            // ImGui.StyleColorsDark();
             
             var io = ImGui.GetIO();
 
@@ -41,12 +39,19 @@ namespace UBImGui
             _settings.ApplyTo(ImGui.GetStyle());
             if (_settings.iniSettingsSize > 0)
                 ImGui.LoadIniSettingsFromMemory(_settings.iniSettings, _settings.iniSettingsSize);
-            
+         
+            _inputHandler = new InputManagerHandler(_settings.cursorAsset);
             _inputHandler.Initialize(io);
             _textures.BuildFontAtlas(io, _settings.fontAsset);
             _textures.BuildAtlasTexture(io);
             _renderer = new GraphicsBufferRenderer(io, _textures);
             _clipboardHandler.Assign(io);
+
+            if (!_settings.IsTemp)
+            {
+                io.SetIniFilename(null);
+                ImGui.LoadIniSettingsFromMemory(_settings.iniSettings, _settings.iniSettingsSize);
+            }
             
             ImGui.NewFrame();
             _frameBegun = true;
@@ -76,7 +81,7 @@ namespace UBImGui
             
             io.DeltaTime = Time.unscaledDeltaTime;
 
-            if (io.WantSaveIniSettings)
+            if (io.WantSaveIniSettings && !_settings.IsTemp)
             {
                 _settings.iniSettings = ImGui.SaveIniSettingsToMemory(out var size);
                 _settings.iniSettingsSize = size;

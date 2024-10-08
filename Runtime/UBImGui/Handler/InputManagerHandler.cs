@@ -9,11 +9,21 @@ namespace UBImGui
 {
     public class InputManagerHandler : IInputHandler
     {
-        private Event _charEvent;
-        
+        private readonly Event _charEvent = new Event();
+        private ImGuiMouseCursor _lastCursor = ImGuiMouseCursor.None;
+        private readonly ImGuiCursorAsset _cursorAsset;
+
+        public InputManagerHandler(ImGuiCursorAsset cursorAsset = null)
+        {
+            _cursorAsset = cursorAsset;
+        }
+
         public void Initialize(ImGuiIOPtr io)
         {
-            _charEvent = new Event();
+            io.BackendFlags |= ImGuiBackendFlags.HasSetMousePos;
+            io.BackendFlags = _cursorAsset ? 
+                io.BackendFlags | ImGuiBackendFlags.HasMouseCursors : 
+                io.BackendFlags & ~ImGuiBackendFlags.HasMouseCursors;
         }
 
         public void Update(ImGuiIOPtr io)
@@ -49,12 +59,32 @@ namespace UBImGui
             io.AddMouseButtonEvent(2, Input.GetMouseButton(2));
             io.AddMouseWheelEvent(Input.mouseScrollDelta.x, Input.mouseScrollDelta.y);
 
+            if (_cursorAsset)
+            {
+                UpdateCursor(io, ImGui.GetMouseCursor());
+            }
+
             
             // Gamepad
             // TODO: Implement Gamepad support
             
             // Touches
             // TODO: Implement Touches support
+        }
+
+        private void UpdateCursor(ImGuiIOPtr io, ImGuiMouseCursor cursor)
+        {
+            if (io.MouseDrawCursor)
+                cursor = ImGuiMouseCursor.None;
+
+            if (_lastCursor == cursor)
+                return;
+            if ((io.ConfigFlags & ImGuiConfigFlags.NoMouseCursorChange) != 0)
+                return;
+
+            _lastCursor = cursor;
+            Cursor.visible = cursor != ImGuiMouseCursor.None;
+            Cursor.SetCursor(_cursorAsset[cursor].texture, _cursorAsset[cursor].hotspot, CursorMode.Auto);
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

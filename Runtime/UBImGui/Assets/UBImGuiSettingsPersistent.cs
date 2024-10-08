@@ -19,7 +19,7 @@ namespace UBImGui
                 return settings.settings;
             }
 
-            return UBImGuiSettings.Default();
+            return UBImGuiSettings.CreateTemporary();
         }
 
 #if UNITY_EDITOR

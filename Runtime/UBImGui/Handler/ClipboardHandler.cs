@@ -35,16 +35,14 @@ namespace UBImGui
         {
             GUIUtility.systemCopyBuffer = StringFromPtr(text);
         }
-
-
-        // Método Assign para configurar as funções de clipboard
+        
         public void Assign(ImGuiIOPtr io)
         {
+            io.ClipboardUserData = IntPtr.Zero;
             io.SetClipboardTextFn = Marshal.GetFunctionPointerForDelegate(_setClipboardText);
             io.GetClipboardTextFn = Marshal.GetFunctionPointerForDelegate(_getClipboardText);
         }
 
-        // Método Unset para remover as funções de clipboard
         public void Unset(ImGuiIOPtr io)
         {
             io.SetClipboardTextFn = IntPtr.Zero;
