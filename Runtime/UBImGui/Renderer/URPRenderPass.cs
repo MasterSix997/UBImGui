@@ -1,5 +1,4 @@
 #if PACKAGE_UNIVERSAL_RP
-using UBImGui;
 using UnityEngine;
 using UnityEngine.Rendering;
 #if PACKAGE_UNIVERSAL_RP_17_0_0_OR_NEWER

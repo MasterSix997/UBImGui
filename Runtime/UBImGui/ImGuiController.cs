@@ -1,6 +1,5 @@
 ﻿using System;
 using ImGuiNET;
-using NUnit.Framework;
 using UnityEngine;
 namespace UBImGui
 {
@@ -10,8 +9,8 @@ namespace UBImGui
 
         private IInputHandler _inputHandler;
         private IImGuiRenderer _renderer;
-        private ImGuiTextures _textures;
-        private ClipboardHandler _clipboardHandler;
+        private readonly ImGuiTextures _textures;
+        private readonly ClipboardHandler _clipboardHandler;
         private UBImGuiSettings _settings;
         private Camera _camera;
         
@@ -42,11 +41,17 @@ namespace UBImGui
             var io = ImGui.GetIO();
 
             _settings = UBImGuiSettingsPersistent.GetSettings();
-            _settings.ApplyTo(ImGui.GetStyle());
+            _settings.ApplyTo(ImGui.GetStyle(), io);
             if (_settings.iniSettingsSize > 0)
                 ImGui.LoadIniSettingsFromMemory(_settings.iniSettings, _settings.iniSettingsSize);
          
-            _inputHandler = new InputSystemHandler(_settings.cursorAsset);
+            _inputHandler = _settings.inputMode switch
+            {
+#if PACKAGE_INPUT_SYSTEM
+                UBImGuiSettings.InputMode.InputSystem => new InputSystemHandler(_settings.cursorAsset),
+#endif
+                _ => new InputManagerHandler(_settings.cursorAsset)
+            };
             _inputHandler.Initialize(io);
             _textures.BuildFontAtlas(io, _settings.fontAsset);
             _textures.BuildAtlasTexture(io);

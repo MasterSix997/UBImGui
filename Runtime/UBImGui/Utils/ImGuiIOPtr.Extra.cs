@@ -1,21 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Runtime.InteropServices;
 using UBImGui;
 
 namespace ImGuiNET
 {
     public unsafe partial struct ImGuiIOPtr
     {
-        // keep track of data allocated by the managed side
-        static readonly HashSet<IntPtr> s_managedAllocations = new HashSet<IntPtr>(IntPtrEqualityComparer.Instance);
+        static readonly HashSet<IntPtr> _managedAllocations = new HashSet<IntPtr>(IntPtrEqualityComparer.Instance);
 
         public void SetBackendRendererName(string name)
         {
             if (NativePtr->BackendRendererName != (byte*)0)
             {
-                if (s_managedAllocations.Contains((IntPtr)NativePtr->BackendRendererName))
+                if (_managedAllocations.Contains((IntPtr)NativePtr->BackendRendererName))
                     Util.Free(NativePtr->BackendRendererName);
                 NativePtr->BackendRendererName = (byte*)0;
             }
@@ -26,7 +24,7 @@ namespace ImGuiNET
                 int offset = Util.GetUtf8(name, nativeName, byteCount);
                 nativeName[offset] = 0;
                 NativePtr->BackendRendererName = nativeName;
-                s_managedAllocations.Add((IntPtr)nativeName);
+                _managedAllocations.Add((IntPtr)nativeName);
             }
         }
 
@@ -34,7 +32,7 @@ namespace ImGuiNET
         {
             if (NativePtr->BackendPlatformName != (byte*)0)
             {
-                if (s_managedAllocations.Contains((IntPtr)NativePtr->BackendPlatformName))
+                if (_managedAllocations.Contains((IntPtr)NativePtr->BackendPlatformName))
                     Util.Free(NativePtr->BackendPlatformName);
                 NativePtr->BackendPlatformName = (byte*)0;
             }
@@ -45,7 +43,7 @@ namespace ImGuiNET
                 int offset = Util.GetUtf8(name, nativeName, byteCount);
                 nativeName[offset] = 0;
                 NativePtr->BackendPlatformName = nativeName;
-                s_managedAllocations.Add((IntPtr)nativeName);
+                _managedAllocations.Add((IntPtr)nativeName);
             }
         }
 
@@ -53,7 +51,7 @@ namespace ImGuiNET
         {
             if (NativePtr->IniFilename != (byte*)0)
             {
-                if (s_managedAllocations.Contains((IntPtr)NativePtr->IniFilename))
+                if (_managedAllocations.Contains((IntPtr)NativePtr->IniFilename))
                     Util.Free(NativePtr->IniFilename);
                 NativePtr->IniFilename = (byte*)0;
             }
@@ -64,7 +62,7 @@ namespace ImGuiNET
                 int offset = Util.GetUtf8(name, nativeName, byteCount);
                 nativeName[offset] = 0;
                 NativePtr->IniFilename = nativeName;
-                s_managedAllocations.Add((IntPtr)nativeName);
+                _managedAllocations.Add((IntPtr)nativeName);
             }
         }
     }

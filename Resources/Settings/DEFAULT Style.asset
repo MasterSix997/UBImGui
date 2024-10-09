@@ -20,9 +20,9 @@ MonoBehaviour:
   WindowMinSize: {x: 32, y: 32}
   WindowTitleAlign: {x: 0, y: 0.5}
   WindowMenuButtonPosition: 0
-  ChildRounding: 0
+  ChildRounding: 4
   ChildBorderSize: 1
-  PopupRounding: 0
+  PopupRounding: 4
   PopupBorderSize: 1
   FramePadding: {x: 4, y: 3}
   FrameRounding: 4
@@ -34,7 +34,7 @@ MonoBehaviour:
   IndentSpacing: 21
   ColumnsMinSpacing: 6
   ScrollbarSize: 14
-  ScrollbarRounding: 9
+  ScrollbarRounding: 4
   GrabMinSize: 12
   GrabRounding: 0
   LogSliderDeadzone: 4

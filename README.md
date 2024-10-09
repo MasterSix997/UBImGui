@@ -8,9 +8,9 @@ Install from [Package Manager:](https://docs.unity3d.com/Manual/upm-ui-giturl.ht
 https://github.com/MasterSix997/UBImGui.git
 ```
 ## Description
-UB ImGui is an integration between "Unity" and [Dear ImGui](https://github.com/ocornut/imgui), without resource bloat, making it easy to modify and extend <br/>
+UB ImGui is an integration between "Unity" and [Dear ImGui](https://github.com/ocornut/imgui), without resource bloat, making it easy to modify and extend. <br/>
 Using the binds provided by [ImGui.Net](https://github.com/ImGuiNET/ImGui.NET) which in turn uses the binds from [cimgui](https://github.com/cimgui/cimgui).
-And some code snippets from the archived [dear-imgui-unity](https://github.com/realgamessoftware/dear-imgui-unity)<br/>
+And some code snippets from the archived [dear-imgui-unity](https://github.com/realgamessoftware/dear-imgui-unity).<br/>
 
 ## Note
 > **`No initial configuration is required`, not even prefabs, or render pipeline passes.<br/>**
@@ -37,7 +37,7 @@ And some code snippets from the archived [dear-imgui-unity](https://github.com/r
 - ✅ Input System
 - ✅ Custom Fonts
 - ✅ Custom Cursors
-- 🟨 FreeType (It's possible to implement, but needs a way to build for Mac and Linux)
+- 🟨 FreeType (It's possible to implement, but needs a way to build "cimgui" for Mac and Linux)
 - 🟨 GUI Scale with DPI or resolution (Currently need to scale manually)
 
 > ✅ - Implemented<br/>
@@ -46,8 +46,8 @@ And some code snippets from the archived [dear-imgui-unity](https://github.com/r
  
 ## Samples
 ### Demo Window
-A demo Window with several usage examples<br/>
-[Available online in web](https://pthom.github.io/imgui_manual_online/manual/imgui_manual.html)
+A demo Window with several usage examples.<br/>
+[Available online in web.](https://pthom.github.io/imgui_manual_online/manual/imgui_manual.html)
 
 ```csharp
 using ImGuiNET;

@@ -25,6 +25,7 @@ namespace UBImGui
         {
             _textures = textures;
             io.BackendFlags |= ImGuiBackendFlags.RendererHasVtxOffset;
+            io.SetBackendRendererName("Unity GraphicsBuffer Procedural Renderer");
         }
 
         public unsafe void UpdateBuffers(ImDrawDataPtr drawData)

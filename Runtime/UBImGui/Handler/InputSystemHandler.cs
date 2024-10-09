@@ -1,5 +1,4 @@
 ﻿#if PACKAGE_INPUT_SYSTEM
-using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using ImGuiNET;
