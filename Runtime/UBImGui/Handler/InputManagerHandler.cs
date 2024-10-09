@@ -20,6 +20,7 @@ namespace UBImGui
 
         public void Initialize(ImGuiIOPtr io)
         {
+            io.SetBackendPlatformName("Unity Input Manager");
             io.BackendFlags |= ImGuiBackendFlags.HasSetMousePos;
             io.BackendFlags = _cursorAsset ? 
                 io.BackendFlags | ImGuiBackendFlags.HasMouseCursors : 
@@ -45,13 +46,13 @@ namespace UBImGui
                 }
             }
             
+            // Mouse
             if (io.WantSetMousePos)
             {
                 Input.compositionCursorPos = ImGuiToScreen(new Vector2(io.MousePos.x, io.MousePos.y));
                 io.WantSetMousePos = false;
             }
             
-            // Mouse
             var mousePos = ScreenToImGui(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
             io.AddMousePosEvent(mousePos.x, mousePos.y);
             io.AddMouseButtonEvent(0, Input.GetMouseButton(0));

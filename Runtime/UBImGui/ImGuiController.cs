@@ -46,7 +46,7 @@ namespace UBImGui
             if (_settings.iniSettingsSize > 0)
                 ImGui.LoadIniSettingsFromMemory(_settings.iniSettings, _settings.iniSettingsSize);
          
-            _inputHandler = new InputManagerHandler(_settings.cursorAsset);
+            _inputHandler = new InputSystemHandler(_settings.cursorAsset);
             _inputHandler.Initialize(io);
             _textures.BuildFontAtlas(io, _settings.fontAsset);
             _textures.BuildAtlasTexture(io);
@@ -126,6 +126,7 @@ namespace UBImGui
         public void Dispose()
         {
             var io = ImGui.GetIO();
+            _inputHandler.Dispose();
             _textures.Dispose();
             _renderer.Dispose();
             _clipboardHandler.Unset(io);

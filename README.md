@@ -24,8 +24,8 @@ And some code snippets from the archived [dear-imgui-unity](https://github.com/r
   - ✅ Windows
   - ✅ Linux
   - ✅ MacOS
-  - ✅ Android
-  - ❌ WebGL
+  - 🟨 Android (can render normally, but touch input needs to be implemented)
+  - ❌ WebGL (how run a "dll" in WebGL?)
 - ✅ Docking
 - ✅ Textures
 - ✅ BuiltIn Support
@@ -37,7 +37,7 @@ And some code snippets from the archived [dear-imgui-unity](https://github.com/r
 - ✅ Input System
 - ✅ Custom Fonts
 - ✅ Custom Cursors
-- 🟨 FreeType
+- 🟨 FreeType (It's possible to implement, but needs a way to build for Mac and Linux)
 - 🟨 GUI Scale with DPI or resolution (Currently need to scale manually)
 
 > ✅ - Implemented<br/>
