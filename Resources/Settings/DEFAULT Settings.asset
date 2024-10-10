@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: DEFAULT Settings
   m_EditorClassIdentifier: 
   styleAsset: {fileID: 11400000, guid: add6a5977e6e7704586c563789be44a6, type: 2}
-  fontAsset: {fileID: 11400000, guid: bc071f1819ea29f4b83a498ada5c8bce, type: 2}
-  cursorAsset: {fileID: 11400000, guid: e1576bae06e2097498732d9b5be847cf, type: 2}
+  fontAsset: {fileID: 0}
+  cursorAsset: {fileID: 0}
   renderInFront: 0
-  inputMode: 1
+  inputMode: 0
   dearImGuiConfig:
     KeyboardNavigation: 1
-    GamepadNavigation: 1
+    GamepadNavigation: 0
     NavSetMousePos: 0
     NavNoCaptureKeyboard: 0
     DoubleClickTime: 0.3
@@ -28,7 +28,7 @@ MonoBehaviour:
     KeyRepeatDelay: 0.275
     KeyRepeatRate: 0.05
     FontGlobalScale: 1
-    FontAllowUserScaling: 1
+    FontAllowUserScaling: 0
     TextCursorBlink: 1
     ResizeFromEdges: 1
     MoveFromTitleOnly: 0
@@ -38,15 +38,13 @@ MonoBehaviour:
     DockingNoSplit: 0
     DockingWithShift: 0
     DockingAlwaysTabBar: 0
-    DockingTransparentPayload: 1
+    DockingTransparentPayload: 0
     InputTextEnterKeepActive: 0
   iniSettings: "[Window][Debug##Default]\nPos=60,60\nSize=400,400\nCollapsed=0\n\n[Window][Dear
-    ImGui Metrics/Debugger]\nPos=1112,418\nSize=290,289\nCollapsed=0\nDockId=0x00000005,0\n\n[Window][Dear
-    ImGui Demo]\nPos=852,27\nSize=550,389\nCollapsed=0\nDockId=0x00000002,0\n\n[Window][Test
-    Window]\nPos=852,418\nSize=258,289\nCollapsed=0\nDockId=0x00000004,0\n\n[Docking][Data]\nDockNode     
-    ID=0x00000001 Pos=852,27 Size=550,680 Split=Y\n  DockNode    ID=0x00000002 Parent=0x00000001
-    SizeRef=550,389 Selected=0xE87781F4\n  DockNode    ID=0x00000003 Parent=0x00000001
-    SizeRef=550,289 Split=X Selected=0x76E46F41\n    DockNode  ID=0x00000004 Parent=0x00000003
-    SizeRef=258,289 Selected=0x76E46F41\n    DockNode  ID=0x00000005 Parent=0x00000003
-    SizeRef=290,289 Selected=0x20E3C5EA\n\n"
-  iniSettingsSize: 734
+    ImGui Metrics/Debugger]\nPos=240,91\nSize=339,375\nCollapsed=0\n\n[Window][Dear
+    ImGui Demo]\nPos=635,36\nSize=732,292\nCollapsed=0\nDockId=0x00000002,0\n\n[Window][Test
+    Window]\nPos=635,330\nSize=732,252\nCollapsed=0\nDockId=0x00000003,0\n\n[Docking][Data]\nDockNode   
+    ID=0x00000001 Pos=635,36 Size=732,546 Split=Y\n  DockNode  ID=0x00000002 Parent=0x00000001
+    SizeRef=550,364 Selected=0xE87781F4\n  DockNode  ID=0x00000003 Parent=0x00000001
+    SizeRef=550,314 Selected=0x76E46F41\n\n"
+  iniSettingsSize: 534

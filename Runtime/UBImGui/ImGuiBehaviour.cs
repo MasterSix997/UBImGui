@@ -3,7 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+#if PACKAGE_UNIVERSAL_RP
 using UnityEngine.Rendering.Universal;
+#endif
+#if PACKAGE_HIGH_DEFINITION_RP
+using UnityEngine.Rendering.HighDefinition;
+#endif
 
 namespace UBImGui
 {
@@ -38,7 +43,10 @@ namespace UBImGui
             if(!Application.isPlaying)
                 throw new Exception("ImGuiBehaviour can only be initialized while the application is playing.");
 
-            var gameObj = new GameObject("ImGuiBehaviour");
+            var gameObj = new GameObject("ImGuiBehaviour")
+            {
+                hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector | HideFlags.NotEditable
+            };
             
             _instance = gameObj.AddComponent<ImGuiBehaviour>();
             

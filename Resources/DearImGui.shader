@@ -1,7 +1,13 @@
 ﻿Shader "Unlit/DearImGui"
 {
+    // TODO : Make this shader modular
+    
+    // Shaders for URP
     SubShader
     {
+        PackageRequirements {
+            "com.unity.render-pipelines.universal": "0.1"
+        }
         Tags { "RenderType" = "Transparent" "RenderPipeline" = "UniversalPipeline" "PreviewType" = "Plane" }
         LOD 100
 
@@ -84,7 +90,7 @@
         }
     }
 
-// shader for builtin rendering and HDRP
+    // shader for builtin rendering and HDRP
     SubShader
     {
         Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" "PreviewType"="Plane" }

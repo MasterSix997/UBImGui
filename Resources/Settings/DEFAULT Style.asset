@@ -15,17 +15,17 @@ MonoBehaviour:
   Alpha: 1
   DisabledAlpha: 0.6
   WindowPadding: {x: 8, y: 8}
-  WindowRounding: 10
+  WindowRounding: 0
   WindowBorderSize: 1
   WindowMinSize: {x: 32, y: 32}
   WindowTitleAlign: {x: 0, y: 0.5}
   WindowMenuButtonPosition: 0
-  ChildRounding: 4
+  ChildRounding: 0
   ChildBorderSize: 1
-  PopupRounding: 4
+  PopupRounding: 0
   PopupBorderSize: 1
   FramePadding: {x: 4, y: 3}
-  FrameRounding: 4
+  FrameRounding: 0
   FrameBorderSize: 0
   ItemSpacing: {x: 8, y: 4}
   ItemInnerSpacing: {x: 4, y: 4}
@@ -34,7 +34,7 @@ MonoBehaviour:
   IndentSpacing: 21
   ColumnsMinSpacing: 6
   ScrollbarSize: 14
-  ScrollbarRounding: 4
+  ScrollbarRounding: 9
   GrabMinSize: 12
   GrabRounding: 0
   LogSliderDeadzone: 4
