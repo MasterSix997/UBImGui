@@ -16,7 +16,9 @@ namespace UBImGui
         public CommandBufferWrapper(CommandBuffer cmd)
         {
             _cmd = cmd;
+#if PACKAGE_UNIVERSAL_RP_17_0_0_OR_NEWER
             _rasterCmd = null;
+#endif
             _isRaster = false;
         }
         

@@ -217,7 +217,6 @@ namespace UBImGui
                 _controller.Render(cmd, camera);
         }
 
-#if PACKAGE_UNIVERSAL_RP
         internal static void ExecuteCustomRenderPass(ScriptableRenderContext context, Camera camera)
         {
             if(!_instance._isEnabled)
@@ -228,6 +227,7 @@ namespace UBImGui
             context.ExecuteCommandBuffer(_instance._cmd);
         }
         
+#if PACKAGE_UNIVERSAL_RP
         internal static void ExecuteCustomRenderGraphPass(in CommandBufferWrapper cmd, Camera camera)
         {
             if(!_instance || !_instance._isEnabled)
