@@ -1,6 +1,7 @@
 ﻿using System;
 using ImGuiNET;
 using UnityEngine;
+
 namespace UBImGui
 {
     public class ImGuiController : IDisposable
@@ -13,6 +14,7 @@ namespace UBImGui
         private readonly ClipboardHandler _clipboardHandler;
         private UBImGuiSettings _settings;
         private Camera _camera;
+        private bool _initialized;
         
         internal event Action Layout;
         
@@ -37,6 +39,12 @@ namespace UBImGui
         {
             Context = ImGui.CreateContext();
             ImGui.SetCurrentContext(Context);
+            
+            if (Context == IntPtr.Zero)
+            {
+                _initialized = false;
+                return;
+            }
             
             var io = ImGui.GetIO();
 
@@ -66,11 +74,14 @@ namespace UBImGui
             
             ImGui.NewFrame();
             _frameBegun = true;
-            
+            _initialized = true;
         }
 
         public void NewFrame()
         {
+            if(!_initialized)
+                return;
+            
             var io = ImGui.GetIO();
             if (_frameBegun)
             {
@@ -104,6 +115,9 @@ namespace UBImGui
 
         public void Render(in CommandBufferWrapper cmd, Camera camera)
         {
+            if(!_initialized)
+                return;
+
             if(_camera != camera)
                 return;
             
@@ -124,6 +138,9 @@ namespace UBImGui
 
         public void MakeCurrent()
         {
+            if(!_initialized)
+                return;
+
             CurrentController = this;
             ImGui.SetCurrentContext(Context);
         }
