@@ -27,7 +27,7 @@ And some code snippets from the archived [dear-imgui-unity](https://github.com/r
   - ✅ Linux
   - ✅ MacOS
   - 🟨 Android (can render normally, but touch input needs to be implemented)
-  - ❌ WebGL (how run a "dll" in WebGL?)
+  - ❌ WebGL (how run a "dll" in WebGL? Maybe Emscripten?)
 - ✅ Docking
 - ✅ Textures
 - ✅ BuiltIn Support
@@ -44,7 +44,7 @@ And some code snippets from the archived [dear-imgui-unity](https://github.com/r
 
 > ✅ - Implemented<br/>
 > 🟨 - Not implemented, but to be done<br/>
-> ❌ - Not implemented, and will not be implemented<br/>
+> ❌ - Not implemented and probably won't be<br/>
  
 ## Samples
 ### Demo Window
