@@ -123,7 +123,7 @@ namespace UBImGui
             
             size = ((size - 1) / 256 + 1) * 256;
             buffer?.Release();
-            buffer = new GraphicsBuffer(target, GraphicsBuffer.UsageFlags.None, size, UnsafeUtility.SizeOf<T>());
+            buffer = new GraphicsBuffer(target, size, UnsafeUtility.SizeOf<T>());
         }
         
         public void Dispose()
