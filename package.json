@@ -11,9 +11,31 @@
     "Immediate Mode",
     "UBImGui"
   ],
+  "samples": [
+    {
+      "displayName": "Demo Window",
+      "description": "Show demo window of dear imgui.",
+      "path": "Samples/Demo Window"
+    },
+    {
+      "displayName": "Simple Window",
+      "description": "Example of a simple window with some widgets.",
+      "path": "Samples/Simple Window"
+    },
+    {
+      "displayName": "Simple Console",
+      "description": "Example of a simple and functional console.",
+      "path": "Samples/Simple Console"
+    }
+  ],
   "author": {
     "name": "MasterSix",
     "email": "igork7silva@gmail.com",
     "url": "https://github.com/MasterSix997"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MasterSix997/UBImGui.git",
+    "revision": ""
   }
 }
