@@ -2,7 +2,7 @@
   "name": "com.mastersix.ubimgui",
   "displayName": "UBImGui",
   "version": "0.0.1",
-  "unity": "2022.4",
+  "unity": "2021.2",
   "description": "UBImGui (Unity Better ImGui) is a binding of \"Dear ImGui\" for Unity. It allows you to create interfaces by code, in immediate mode, in a simple and intuitive way.",
   "keywords": [
     "Dear ImGui",
