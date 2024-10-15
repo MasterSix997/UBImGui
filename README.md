@@ -1,7 +1,7 @@
 ﻿# UB imgui
 ![version tag](https://img.shields.io/badge/version-0.0.1-blue)
-![dear imgui version tag](https://img.shields.io/badge/DearImGui-1.91.0-orange)
-![imgui.net version tag](https://img.shields.io/badge/ImGui.Net-1.91.0.1-purple)<br/>
+[![dear imgui version tag](https://img.shields.io/badge/DearImGui-1.91.0-orange)](https://github.com/ocornut/imgui)
+[![imgui.net version tag](https://img.shields.io/badge/ImGui.Net-1.91.0.1-purple)](https://github.com/ImGuiNET/ImGui.NET)<br/>
 <br/>
 <br/>
 Install from [Package Manager:](https://docs.unity3d.com/Manual/upm-ui-giturl.html)
@@ -19,15 +19,16 @@ Using the binds provided by [ImGui.Net](https://github.com/ImGuiNET/ImGui.NET) w
 And some code snippets from the archived [dear-imgui-unity](https://github.com/realgamessoftware/dear-imgui-unity).<br/>
 
 ## Features
-- Unity Versions 
+- Unity Versions
+  - ✅ Unity 2021
   - ✅ Unity 2022
   - ✅ Unity 6
 - Platforms
   - ✅ Windows
   - ✅ Linux
   - ✅ MacOS
-  - 🟨 Android (can render normally, but touch input needs to be implemented)
-  - ❌ WebGL (how run a "dll" in WebGL? Maybe Emscripten?)
+  - 🟨 Android (Only works on IL2CPP builds)
+  - ❌ WebGL (how run a "dll" in WebGL? Maybe with Emscripten?)
 - ✅ Docking
 - ✅ Textures
 - ✅ BuiltIn Support
