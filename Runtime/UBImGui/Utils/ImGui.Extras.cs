@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using UBImGui;
 using UnityEngine;
 
-namespace ImGuiNET
+namespace SharpImgui
 {
     public static unsafe partial class ImGui
     {

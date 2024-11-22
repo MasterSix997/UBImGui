@@ -1,4 +1,4 @@
-﻿using ImGuiNET;
+﻿using SharpImgui;
 using UnityEngine;
 
 namespace UBImGui

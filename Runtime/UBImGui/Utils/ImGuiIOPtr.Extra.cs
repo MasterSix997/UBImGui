@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UBImGui;
 
-namespace ImGuiNET
+namespace SharpImgui
 {
     public unsafe partial struct ImGuiIOPtr
     {
