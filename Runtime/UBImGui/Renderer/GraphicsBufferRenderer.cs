@@ -1,4 +1,4 @@
-﻿using SharpImgui;
+﻿using SharpImGui;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;

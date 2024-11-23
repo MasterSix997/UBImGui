@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using UBImGui;
 using UnityEngine;
 
-namespace SharpImgui
+namespace SharpImGui
 {
     public static unsafe partial class ImGui
     {
@@ -32,7 +32,7 @@ namespace SharpImgui
             var uv1 = new Vector2(1, 1);
             var tintCol = new Vector4(1, 1, 1, 1);
             var borderCol = new Vector4();
-            ImGuiNative.igImage(idPtr, size, uv0, uv1, tintCol, borderCol);
+            ImGuiNative.ImGui_ImageEx(idPtr, size, uv0, uv1, tintCol, borderCol);
         }
         
         public static void Image(Texture texture, Vector2 size)
@@ -42,7 +42,7 @@ namespace SharpImgui
             var uv1 = new Vector2(1, 1);
             var tintCol = new Vector4(1, 1, 1, 1);
             var borderCol = new Vector4();
-            ImGuiNative.igImage(idPtr, size, uv0, uv1, tintCol, borderCol);
+            ImGuiNative.ImGui_ImageEx(idPtr, size, uv0, uv1, tintCol, borderCol);
         }
         
         public static void Image(Sprite sprite)
@@ -55,7 +55,7 @@ namespace SharpImgui
             var uv1 = new Vector2(uvs[1].x, 1f - uvs[1].y);
             var tintCol = new Vector4(1, 1, 1, 1);
             var borderCol = new Vector4();
-            ImGuiNative.igImage(idPtr, size, uv0, uv1, tintCol, borderCol);
+            ImGuiNative.ImGui_ImageEx(idPtr, size, uv0, uv1, tintCol, borderCol);
         }
         
         public static void Image(Sprite sprite, Vector2 size)
@@ -67,7 +67,7 @@ namespace SharpImgui
             var uv1 = new Vector2(uvs[1].x, 1f - uvs[1].y);
             var tintCol = new Vector4(1, 1, 1, 1);
             var borderCol = new Vector4();
-            ImGuiNative.igImage(idPtr, size, uv0, uv1, tintCol, borderCol);
+            ImGuiNative.ImGui_ImageEx(idPtr, size, uv0, uv1, tintCol, borderCol);
         }
 
         public static bool ImageButton(string str_id, Texture texture)

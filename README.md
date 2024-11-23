@@ -1,7 +1,7 @@
 ﻿# UB imgui
 ![version tag](https://img.shields.io/badge/version-0.0.1-blue)
-[![dear imgui version tag](https://img.shields.io/badge/DearImGui-1.91.0-orange)](https://github.com/ocornut/imgui)
-[![imgui.net version tag](https://img.shields.io/badge/ImGui.Net-1.91.0.1-purple)](https://github.com/ImGuiNET/ImGui.NET)<br/>
+[![dear imgui version tag](https://img.shields.io/badge/DearImGui-1.91.6-orange)](https://github.com/ocornut/imgui)
+[![SharpImGui version tag](https://img.shields.io/badge/SharpImGui-1.91.6.0-purple)](https://github.com/MasterSix997/SharpImGui)<br/>
 <br/>
 <br/>
 Install from [Package Manager:](https://docs.unity3d.com/Manual/upm-ui-giturl.html)
@@ -15,8 +15,7 @@ https://github.com/MasterSix997/UBImGui.git
 
 ## Description
 UB ImGui is an integration between "Unity" and [Dear ImGui](https://github.com/ocornut/imgui), without resource bloat, making it easy to modify and extend. <br/>
-Using the binds provided by [ImGui.Net](https://github.com/ImGuiNET/ImGui.NET) which in turn uses the binds from [cimgui](https://github.com/cimgui/cimgui).
-And some code snippets from the archived [dear-imgui-unity](https://github.com/realgamessoftware/dear-imgui-unity).<br/>
+Using the binds provided by [SharpImGui](https://github.com/MasterSix997/SharpImGui) which in turn uses the binds from [dear_bindings](https://github.com/dearimgui/dear_bindings).
 
 ## Features
 - Unity Versions
