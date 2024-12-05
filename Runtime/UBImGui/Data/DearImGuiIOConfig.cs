@@ -1,5 +1,5 @@
 ﻿using System;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using UnityEngine;
 
 namespace UBImGui
@@ -72,8 +72,6 @@ namespace UBImGui
         {
             io.ConfigFlags = KeyboardNavigation ? io.ConfigFlags | ImGuiConfigFlags.NavEnableKeyboard : io.ConfigFlags & ~ImGuiConfigFlags.NavEnableKeyboard;
             io.ConfigFlags = GamepadNavigation ? io.ConfigFlags | ImGuiConfigFlags.NavEnableGamepad : io.ConfigFlags & ~ImGuiConfigFlags.NavEnableGamepad;
-            io.ConfigFlags = NavSetMousePos ? io.ConfigFlags | ImGuiConfigFlags.NavEnableSetMousePos : io.ConfigFlags & ~ImGuiConfigFlags.NavEnableSetMousePos;
-            io.ConfigFlags = NavNoCaptureKeyboard ? io.ConfigFlags | ImGuiConfigFlags.NavNoCaptureKeyboard : io.ConfigFlags & ~ImGuiConfigFlags.NavNoCaptureKeyboard;
             io.MouseDoubleClickTime = DoubleClickTime;
             io.MouseDoubleClickMaxDist = DoubleClickMaxDist;
             io.MouseDragThreshold = DragThreshold;
@@ -99,8 +97,6 @@ namespace UBImGui
         {
             KeyboardNavigation = (io.ConfigFlags & ImGuiConfigFlags.NavEnableKeyboard) != 0;
             GamepadNavigation = (io.ConfigFlags & ImGuiConfigFlags.NavEnableGamepad) != 0;
-            NavSetMousePos = (io.ConfigFlags & ImGuiConfigFlags.NavEnableSetMousePos) != 0;
-            NavNoCaptureKeyboard = (io.ConfigFlags & ImGuiConfigFlags.NavNoCaptureKeyboard) != 0;
             DoubleClickTime = io.MouseDoubleClickTime;
             DoubleClickMaxDist = io.MouseDoubleClickMaxDist;
             DragThreshold = io.MouseDragThreshold;
@@ -129,7 +125,7 @@ namespace UBImGui
             ImGui.SetCurrentContext(context);
             CopyFrom(ImGui.GetIO());
             
-            if (oldCtx != IntPtr.Zero)
+            if (oldCtx != ImGuiContextPtr.Null)
                 ImGui.SetCurrentContext(oldCtx);
             
             ImGui.DestroyContext(context);

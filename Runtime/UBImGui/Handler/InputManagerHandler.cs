@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -20,7 +20,7 @@ namespace UBImGui
 
         public void Initialize(ImGuiIOPtr io)
         {
-            io.SetBackendPlatformName("Unity Input Manager");
+            // io.SetBackendPlatformName("Unity Input Manager");
             io.BackendFlags |= ImGuiBackendFlags.HasSetMousePos;
             io.BackendFlags = _cursorAsset ? 
                 io.BackendFlags | ImGuiBackendFlags.HasMouseCursors : 
@@ -49,7 +49,7 @@ namespace UBImGui
             // Mouse
             if (io.WantSetMousePos)
             {
-                Input.compositionCursorPos = ImGuiToScreen(new Vector2(io.MousePos.x, io.MousePos.y));
+                Input.compositionCursorPos = ImGuiToScreen(new Vector2(io.MousePos.X, io.MousePos.Y));
                 io.WantSetMousePos = false;
             }
             
@@ -116,7 +116,7 @@ namespace UBImGui
                 KeyCode.Print => ImGuiKey.PrintScreen,
                 KeyCode.Insert => ImGuiKey.Insert,
                 KeyCode.Delete => ImGuiKey.Delete,
-                >= KeyCode.Keypad0 and <= KeyCode.Keypad9 => ImGuiKey._0 + (keyCode - KeyCode.Keypad0),
+                >= KeyCode.Keypad0 and <= KeyCode.Keypad9 => ImGuiKey.Key0 + (keyCode - KeyCode.Keypad0),
                 >= KeyCode.A and <= KeyCode.Z => ImGuiKey.A + (keyCode - KeyCode.A),
                 >= KeyCode.Alpha0 and <= KeyCode.Alpha9 => ImGuiKey.Keypad0 + (keyCode - KeyCode.Alpha0),
                 KeyCode.KeypadMultiply => ImGuiKey.KeypadMultiply,
@@ -152,13 +152,13 @@ namespace UBImGui
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static Vector2 ScreenToImGui(in Vector2 point)
         {
-            return new Vector2(point.x, ImGui.GetIO().DisplaySize.y - point.y);
+            return new Vector2(point.x, ImGui.GetIO().DisplaySize.Y - point.y);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static Vector2 ImGuiToScreen(in Vector2 point)
         {
-            return new Vector2(point.x, ImGui.GetIO().DisplaySize.y - point.y);
+            return new Vector2(point.x, ImGui.GetIO().DisplaySize.Y - point.y);
         }
     }
 }

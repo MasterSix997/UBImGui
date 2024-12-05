@@ -1,12 +1,7 @@
 {
     "name": "UBImGui",
-    "rootNamespace": "UBImGui",
-    "references": [
-        "GUID:15fc0a57446b3144c949da3e2b9737a9",
-        "GUID:df380645f10b7bc4b97d4f5eb6303d95",
-        "GUID:457756d89b35d2941b3e7b37b4ece6f1",
-        "GUID:75469ad4d38634e559750d17036d5f7c"
-    ],
+    "rootNamespace": "",
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": true,
@@ -14,32 +9,6 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [
-        {
-            "name": "com.unity.render-pipelines.universal",
-            "expression": "0.0.0",
-            "define": "PACKAGE_UNIVERSAL_RP"
-        },
-        {
-            "name": "com.unity.render-pipelines.high-definition",
-            "expression": "0.0.0",
-            "define": "PACKAGE_HIGH_DEFINITION_RP"
-        },
-        {
-            "name": "com.unity.inputsystem",
-            "expression": "0.0.0",
-            "define": "PACKAGE_INPUT_SYSTEM"
-        },
-        {
-            "name": "com.unity.render-pipelines.universal",
-            "expression": "17.0.0",
-            "define": "PACKAGE_UNIVERSAL_RP_17_0_0_OR_NEWER"
-        },
-        {
-            "name": "com.unity.render-pipelines.high-definition",
-            "expression": "9.0",
-            "define": "PACKAGE_HIGH_DEFINITION_RP_9_0_OR_NEWER"
-        }
-    ],
+    "versionDefines": [],
     "noEngineReferences": false
 }
