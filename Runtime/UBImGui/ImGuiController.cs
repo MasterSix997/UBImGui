@@ -1,6 +1,7 @@
 ﻿using System;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using UnityEngine;
+using Vector2 = System.Numerics.Vector2;
 
 namespace UBImGui
 {
@@ -20,7 +21,7 @@ namespace UBImGui
         
         public static ImGuiController CurrentController { get; private set; }
         public static bool HasController => CurrentController != null;
-        public IntPtr Context { get; private set; }
+        public ImGuiContextPtr Context { get; private set; }
         
         internal ImGuiTextures Textures => _textures;
         internal UBImGuiSettings Settings => _settings;
@@ -40,18 +41,22 @@ namespace UBImGui
             Context = ImGui.CreateContext();
             ImGui.SetCurrentContext(Context);
             
-            if (Context == IntPtr.Zero)
+            if (Context == ImGuiContextPtr.Null)
             {
                 _initialized = false;
                 return;
             }
             
             var io = ImGui.GetIO();
+            var platformIO = ImGui.GetPlatformIO();
 
             _settings = UBImGuiSettingsPersistent.GetSettings();
-            _settings.ApplyTo(ImGui.GetStyle(), io);
-            if (_settings.iniSettingsSize > 0)
-                ImGui.LoadIniSettingsFromMemory(_settings.iniSettings, _settings.iniSettingsSize);
+            // _settings.ApplyTo(ImGui.GetStyle(), io);
+            // if (!_settings.IsTemp && _settings.iniSettingsSize > 0)
+            // {
+            //     io.SetIniFilename(null);
+            //     ImGui.LoadIniSettingsFromMemory(_settings.iniSettings, _settings.iniSettingsSize);
+            // }
          
             _inputHandler = _settings.inputMode switch
             {
@@ -64,16 +69,10 @@ namespace UBImGui
             _textures.BuildFontAtlas(io, _settings.fontAsset);
             _textures.BuildAtlasTexture(io);
             _renderer = new GraphicsBufferRenderer(io, _textures);
-            _clipboardHandler.Assign(io);
+            _clipboardHandler.Assign(platformIO);
 
-            if (!_settings.IsTemp)
-            {
-                io.SetIniFilename(null);
-                ImGui.LoadIniSettingsFromMemory(_settings.iniSettings, _settings.iniSettingsSize);
-            }
             
-            ImGui.NewFrame();
-            _frameBegun = true;
+            _frameBegun = false;
             _initialized = true;
         }
 
@@ -105,12 +104,12 @@ namespace UBImGui
             
             io.DeltaTime = Time.unscaledDeltaTime;
 
-            if (io.WantSaveIniSettings && !_settings.IsTemp)
-            {
-                _settings.iniSettings = ImGui.SaveIniSettingsToMemory(out var size);
-                _settings.iniSettingsSize = size;
-                io.WantSaveIniSettings = false;
-            }
+            // if (io.WantSaveIniSettings && !_settings.IsTemp)
+            // {
+            //     _settings.iniSettings = ImGui.SaveIniSettingsToMemory(out var size);
+            //     _settings.iniSettingsSize = size;
+            //     io.WantSaveIniSettings = false;
+            // }
         }
 
         public void Render(in CommandBufferWrapper cmd, Camera camera)
@@ -129,7 +128,7 @@ namespace UBImGui
 
             var drawData = ImGui.GetDrawData();
             var frameBufferSize = drawData.DisplaySize * drawData.FramebufferScale;
-            if (frameBufferSize.x <= 0 || frameBufferSize.y <= 0)
+            if (frameBufferSize.X <= 0 || frameBufferSize.Y <= 0)
                 return;
             
             _renderer.UpdateBuffers(drawData);
@@ -148,14 +147,15 @@ namespace UBImGui
         public void Dispose()
         {
             var io = ImGui.GetIO();
+            var platformIO = ImGui.GetPlatformIO();
             _inputHandler.Dispose();
             _textures.Dispose();
             _renderer.Dispose();
-            _clipboardHandler.Unset(io);
+            _clipboardHandler.Unset(platformIO);
             _clipboardHandler.Dispose();
             Layout = null;
             ImGui.DestroyContext(Context);
-            Context = IntPtr.Zero;
+            Context = ImGuiContextPtr.Null;
             CurrentController = null;
         }
     }

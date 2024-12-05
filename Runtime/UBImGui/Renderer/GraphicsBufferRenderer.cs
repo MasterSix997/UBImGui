@@ -1,4 +1,4 @@
-﻿using ImGuiNET;
+﻿using Hexa.NET.ImGui;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
@@ -25,7 +25,7 @@ namespace UBImGui
         {
             _textures = textures;
             io.BackendFlags |= ImGuiBackendFlags.RendererHasVtxOffset;
-            io.SetBackendRendererName("Unity GraphicsBuffer Procedural Renderer");
+            // io.SetBackendRendererName("Unity GraphicsBuffer Procedural Renderer");
         }
 
         public unsafe void UpdateBuffers(ImDrawDataPtr drawData)
@@ -75,18 +75,18 @@ namespace UBImGui
             }
         }
 
-        public void Render(in CommandBufferWrapper cmd, ImDrawDataPtr drawData, Vector2 frameBufferSize)
+        public void Render(in CommandBufferWrapper cmd, ImDrawDataPtr drawData, System.Numerics.Vector2 frameBufferSize)
         {
-            var prevTextureId = System.IntPtr.Zero;
-            var clipOffset = new Vector4(drawData.DisplayPos.x, drawData.DisplayPos.y, drawData.DisplayPos.x, drawData.DisplayPos.y);
-            var clipScale = new Vector4(drawData.FramebufferScale.x, drawData.FramebufferScale.y, drawData.FramebufferScale.x, drawData.FramebufferScale.y);
+            var prevTextureId = ImTextureID.Null;
+            var clipOffset = new Vector4(drawData.DisplayPos.X, drawData.DisplayPos.Y, drawData.DisplayPos.X, drawData.DisplayPos.Y);
+            var clipScale = new Vector4(drawData.FramebufferScale.X, drawData.FramebufferScale.Y, drawData.FramebufferScale.X, drawData.FramebufferScale.Y);
 
             _material.SetBuffer(VertexProperty, _vertexBuffer);
 
-            cmd.SetViewport(new Rect(0f, 0f, frameBufferSize.x, frameBufferSize.y));
+            cmd.SetViewport(new Rect(0f, 0f, frameBufferSize.X, frameBufferSize.Y));
             cmd.SetViewProjectionMatrices(
-                Matrix4x4.Translate(new Vector3(0.5f / frameBufferSize.x, 0.5f / frameBufferSize.y, 0f)), // small adjustment to improve text
-                Matrix4x4.Ortho(0f, frameBufferSize.x, frameBufferSize.y, 0f, 0f, 1f));
+                Matrix4x4.Translate(new Vector3(0.5f / frameBufferSize.X, 0.5f / frameBufferSize.Y, 0f)), // small adjustment to improve text
+                Matrix4x4.Ortho(0f, frameBufferSize.X, frameBufferSize.Y, 0f, 0f, 1f));
             
             var vtxOffset = 0;
             var argOffset = 0;
@@ -98,17 +98,17 @@ namespace UBImGui
                     var drawCmd = drawList.CmdBuffer[i];
                     // TODO: user callback in drawCmd.UserCallback & drawCmd.UserCallbackData
                     
-                    var drawCmdU = new Vector4(drawCmd.ClipRect.x, drawCmd.ClipRect.y, drawCmd.ClipRect.z, drawCmd.ClipRect.w);
+                    var drawCmdU = new Vector4(drawCmd.ClipRect.X, drawCmd.ClipRect.Y, drawCmd.ClipRect.Z, drawCmd.ClipRect.W);
                     var clip = Vector4.Scale(drawCmdU - clipOffset, clipScale);
-                    if (clip.x >= frameBufferSize.x || clip.y >= frameBufferSize.y || clip.z < 0f || clip.w < 0f) continue;
+                    if (clip.x >= frameBufferSize.X || clip.y >= frameBufferSize.Y || clip.z < 0f || clip.w < 0f) continue;
 
                     if (prevTextureId != drawCmd.TextureId)
                     {
-                        _properties.SetTexture(TextureProperty, _textures.GetTexture((int)(prevTextureId = drawCmd.TextureId)));
+                        _properties.SetTexture(TextureProperty, _textures.GetTexture(prevTextureId = drawCmd.TextureId));
                     }
 
                     _properties.SetInt(BaseVertexProperty, vtxOffset + (int)drawCmd.VtxOffset);
-                    cmd.EnableScissorRect(new Rect(clip.x, frameBufferSize.y - clip.w, clip.z - clip.x, clip.w - clip.y)); // invert y
+                    cmd.EnableScissorRect(new Rect(clip.x, frameBufferSize.Y - clip.w, clip.z - clip.x, clip.w - clip.y)); // invert y
                     cmd.DrawProceduralIndirect(_indexBuffer, Matrix4x4.identity, _material, -1, MeshTopology.Triangles, _argsBuffer, argOffset, _properties);
                 }
                 vtxOffset += drawList.VtxBuffer.Size;

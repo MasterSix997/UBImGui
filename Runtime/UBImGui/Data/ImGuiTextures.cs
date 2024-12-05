@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
@@ -21,7 +21,7 @@ namespace UBImGui
         {
             _currentTextureId = 0;
             _textures.Clear();
-            io.Fonts.SetTexID((IntPtr)Bind(_atlasTexture));
+            io.Fonts.SetTexID(new ImTextureID((IntPtr)Bind(_atlasTexture)));
         }
 
         private int Bind(Texture texture)
@@ -32,6 +32,12 @@ namespace UBImGui
         
         public Texture GetTexture(int id)
         {
+            return _textures.Contains(id) ? _textures[id] : null;
+        }
+        
+        public Texture GetTexture(ImTextureID textureId)
+        {
+            var id = (int)textureId.Handle;
             return _textures.Contains(id) ? _textures[id] : null;
         }
         
@@ -59,25 +65,25 @@ namespace UBImGui
             return (IntPtr)id;
         }
         
-        unsafe IntPtr AllocateGlyphRangeArray(in FontSettings fontSettings)
+        unsafe uint* AllocateGlyphRangeArray(in FontSettings fontSettings)
         {
             var values = fontSettings.BuildRanges();
             if (values.Count == 0)
-                return IntPtr.Zero;
+                return null;
         
             int byteCount = sizeof(ushort) * (values.Count + 1); // terminating zero
-            var ranges = (ushort*)Util.Allocate(byteCount);
+            var ranges = (uint*)Allocation.Allocate(byteCount);
             _allocatedGlyphRangeArrays.Add((IntPtr)ranges);
             for (var i = 0; i < values.Count; ++i)
                 ranges[i] = values[i];
             ranges[values.Count] = 0;
-            return (IntPtr)ranges;
+            return ranges;
         }
 
         unsafe void FreeGlyphRangeArrays()
         {
             foreach (var range in _allocatedGlyphRangeArrays)
-                Util.Free((byte*)range);
+                Allocation.Free((byte*)range);
             _allocatedGlyphRangeArrays.Clear();
         }
         
@@ -110,7 +116,9 @@ namespace UBImGui
 
         public unsafe void BuildAtlasTexture(ImGuiIOPtr io)
         {
-            io.Fonts.GetTexDataAsRGBA32(out byte* pixels, out var width, out var height, out var bytesPerPixel);
+            byte* pixels = null;
+            int width = 0, height = 0, bytesPerPixel = 0;
+            io.Fonts.GetTexDataAsRGBA32(ref pixels, ref width, ref height, ref bytesPerPixel);
             _atlasTexture = new Texture2D(width, height, TextureFormat.RGBA32, false, false)
             {
                 filterMode = FilterMode.Point
@@ -133,7 +141,7 @@ namespace UBImGui
             FreeGlyphRangeArrays();
 
             io.Fonts.Clear();
-            io.NativePtr->FontDefault = default;
+            io.FontDefault = default;
         }
 
         public void Dispose()

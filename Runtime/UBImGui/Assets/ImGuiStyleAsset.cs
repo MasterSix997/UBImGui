@@ -1,6 +1,8 @@
 ﻿using System;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using UnityEngine;
+using Vector2 = System.Numerics.Vector2;
+using Vector4 = System.Numerics.Vector4;
 
 namespace UBImGui
 {
@@ -61,7 +63,7 @@ namespace UBImGui
         public ImGuiHoveredFlags HoverFlagsForTooltipMouse;
         public ImGuiHoveredFlags HoverFlagsForTooltipNav;
         [HideInInspector]
-        public Color[] Colors = new Color[(int)ImGuiCol.COUNT];
+        public Color[] Colors = new Color[(int)ImGuiCol.Count];
         
         public void ApplyTo(ImGuiStylePtr style)
         {
@@ -120,7 +122,7 @@ namespace UBImGui
             style.HoverFlagsForTooltipNav = HoverFlagsForTooltipNav;
             for (int i = 0; i < Colors.Length; i++)
             {
-                style.Colors[i] = Colors[i];
+                style.Colors[i] = new Vector4(Colors[i].r, Colors[i].g, Colors[i].b, Colors[i].a);
             }
         }
 
@@ -180,7 +182,7 @@ namespace UBImGui
             HoverFlagsForTooltipMouse = style.HoverFlagsForTooltipMouse;
             HoverFlagsForTooltipNav = style.HoverFlagsForTooltipNav;
             for (int i = 0; i < Colors.Length; i++)
-                Colors[i] = style.Colors[i];
+                Colors[i] = new Color(style.Colors[i].X, style.Colors[i].Y, style.Colors[i].Z, style.Colors[i].W);
         }
 
         public void Reset()
@@ -190,7 +192,7 @@ namespace UBImGui
             ImGui.SetCurrentContext(context);
             CopyFrom(ImGui.GetStyle());
             
-            if (oldCtx != IntPtr.Zero)
+            if (oldCtx != ImGuiContextPtr.Null)
                 ImGui.SetCurrentContext(oldCtx);
             
             ImGui.DestroyContext(context);

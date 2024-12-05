@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 using AOT;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using UnityEngine;
 
 namespace UBImGui
@@ -36,17 +36,17 @@ namespace UBImGui
             GUIUtility.systemCopyBuffer = StringFromPtr(text);
         }
         
-        public void Assign(ImGuiIOPtr io)
+        public void Assign(ImGuiPlatformIOPtr io)
         {
-            io.ClipboardUserData = IntPtr.Zero;
-            io.SetClipboardTextFn = Marshal.GetFunctionPointerForDelegate(_setClipboardText);
-            io.GetClipboardTextFn = Marshal.GetFunctionPointerForDelegate(_getClipboardText);
+            io.PlatformClipboardUserData = null;
+            io.PlatformSetClipboardTextFn = (void*)Marshal.GetFunctionPointerForDelegate(_setClipboardText);
+            io.PlatformGetClipboardTextFn = (void*)Marshal.GetFunctionPointerForDelegate(_getClipboardText);
         }
 
-        public void Unset(ImGuiIOPtr io)
+        public void Unset(ImGuiPlatformIOPtr io)
         {
-            io.SetClipboardTextFn = IntPtr.Zero;
-            io.GetClipboardTextFn = IntPtr.Zero;
+            io.PlatformSetClipboardTextFn = null;
+            io.PlatformGetClipboardTextFn = null;
         }
 
         public void Dispose()

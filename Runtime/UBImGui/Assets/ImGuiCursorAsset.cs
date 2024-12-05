@@ -1,5 +1,5 @@
 ﻿using System;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using UnityEngine;
 
 namespace UBImGui
@@ -50,10 +50,10 @@ namespace UBImGui
                     case ImGuiMouseCursor.Arrow:      return ref Arrow;
                     case ImGuiMouseCursor.TextInput:  return ref TextInput;
                     case ImGuiMouseCursor.ResizeAll:  return ref ResizeAll;
-                    case ImGuiMouseCursor.ResizeEW:   return ref ResizeEW;
-                    case ImGuiMouseCursor.ResizeNS:   return ref ResizeNS;
-                    case ImGuiMouseCursor.ResizeNESW: return ref ResizeNESW;
-                    case ImGuiMouseCursor.ResizeNWSE: return ref ResizeNWSE;
+                    case ImGuiMouseCursor.ResizeEw:   return ref ResizeEW;
+                    case ImGuiMouseCursor.ResizeNs:   return ref ResizeNS;
+                    case ImGuiMouseCursor.ResizeNesw: return ref ResizeNESW;
+                    case ImGuiMouseCursor.ResizeNwse: return ref ResizeNWSE;
                     case ImGuiMouseCursor.Hand:       return ref Hand;
                     case ImGuiMouseCursor.NotAllowed: return ref NotAllowed;
                     default:                          return ref Arrow;
