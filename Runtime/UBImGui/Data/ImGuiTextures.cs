@@ -15,13 +15,13 @@ namespace UBImGui
         private Texture2D _atlasTexture;
         private readonly TwoWayDictionary<int, Texture> _textures = new TwoWayDictionary<int, Texture>();
         private int _currentTextureId;
-        readonly HashSet<IntPtr> _allocatedGlyphRangeArrays = new HashSet<IntPtr>(IntPtrEqualityComparer.Instance);
+        readonly HashSet<ulong> _allocatedGlyphRangeArrays = new();
 
         public void UpdateTextures(ImGuiIOPtr io)
         {
             _currentTextureId = 0;
             _textures.Clear();
-            io.Fonts.SetTexID((IntPtr)Bind(_atlasTexture));
+            io.Fonts.SetTexID((ulong)Bind(_atlasTexture));
         }
 
         private int Bind(Texture texture)
@@ -40,44 +40,47 @@ namespace UBImGui
             return _textures.Contains(texture) ? _textures[texture] : -1;
         }
         
-        public IntPtr GetTexturePtr(Texture texture)
+        public ulong GetTexturePtr(Texture texture)
         {
-            return (IntPtr)GetTextureId(texture);
+            return (ulong)GetTextureId(texture);
         }
         
-        public IntPtr GetTexturePtr(int id)
+        public ulong GetTexturePtr(int id)
         {
-            return _textures.Contains(id) ? (IntPtr)id : IntPtr.Zero;
+            return _textures.Contains(id) ? (ulong)id : 0;
         }
 
-        public IntPtr GetOrCreate(Texture texture)
+        public ulong GetOrCreate(Texture texture)
         {
             var id = GetTextureId(texture);
             if (id == -1)
                 id = Bind(texture);
             
-            return (IntPtr)id;
+            return (ulong)id;
         }
         
-        unsafe IntPtr AllocateGlyphRangeArray(in FontSettings fontSettings)
+        unsafe ushort[] AllocateGlyphRangeArray(in FontSettings fontSettings)
         {
             var values = fontSettings.BuildRanges();
             if (values.Count == 0)
-                return IntPtr.Zero;
+                return null;//IntPtr.Zero;
         
             int byteCount = sizeof(ushort) * (values.Count + 1); // terminating zero
-            var ranges = (ushort*)Util.Allocate(byteCount);
-            _allocatedGlyphRangeArrays.Add((IntPtr)ranges);
+            //var ranges = (ushort*)Utils.Alloc<ushort>(byteCount);
+            var ranges = new ushort[values.Count + 1];
+            fixed(ushort* rangesPtr = ranges)
+                _allocatedGlyphRangeArrays.Add((ulong)rangesPtr);
+            
             for (var i = 0; i < values.Count; ++i)
                 ranges[i] = values[i];
             ranges[values.Count] = 0;
-            return (IntPtr)ranges;
+            return ranges;
         }
 
         unsafe void FreeGlyphRangeArrays()
         {
             foreach (var range in _allocatedGlyphRangeArrays)
-                Util.Free((byte*)range);
+                Utils.Free((byte*)range);
             _allocatedGlyphRangeArrays.Clear();
         }
         
@@ -110,7 +113,7 @@ namespace UBImGui
 
         public unsafe void BuildAtlasTexture(ImGuiIOPtr io)
         {
-            io.Fonts.GetTexDataAsRGBA32(out byte* pixels, out var width, out var height, out var bytesPerPixel);
+            io.Fonts.GetTexDataAsRgba32(out byte* pixels, out var width, out var height, out var bytesPerPixel);
             _atlasTexture = new Texture2D(width, height, TextureFormat.RGBA32, false, false)
             {
                 filterMode = FilterMode.Point

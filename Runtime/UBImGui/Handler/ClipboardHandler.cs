@@ -12,30 +12,30 @@ namespace UBImGui
         // Store bytes to free later
         private static byte* _lastClipboardText = null;
         
-        [MonoPInvokeCallback(typeof(Platform_GetClipboardTextFnDelegate))]
-        private static byte* GetClipboardTextCallback(IntPtr ctx)
+        [MonoPInvokeCallback(typeof(PlatformGetClipboardTextFn))]
+        private static byte* GetClipboardTextCallback(ImGuiContext* ctx)
         {
             _lastClipboardText = PtrFromString(GUIUtility.systemCopyBuffer);
             return _lastClipboardText;
         }
 
-        [MonoPInvokeCallback(typeof(Platform_GetClipboardTextFnDelegate))]
-        private static void SetClipboardTextCallback(IntPtr ctx, byte* text)
+        [MonoPInvokeCallback(typeof(PlatformGetClipboardTextFn))]
+        private static void SetClipboardTextCallback(ImGuiContext* ctx, byte* text)
         {
             GUIUtility.systemCopyBuffer = StringFromPtr(text);
         }
         
         public void Assign(ImGuiPlatformIOPtr io)
         {
-            io.Platform_ClipboardUserData = IntPtr.Zero;
-            io.Platform_SetClipboardTextFn = SetClipboardTextCallback;
-            io.Platform_GetClipboardTextFn = GetClipboardTextCallback;
+            io.PlatformClipboardUserData = IntPtr.Zero;
+            io.PlatformSetClipboardTextFn = SetClipboardTextCallback;
+            io.PlatformGetClipboardTextFn = GetClipboardTextCallback;
         }
 
         public void Unset(ImGuiPlatformIOPtr io)
         {
-            io.NativePtr->Platform_SetClipboardTextFn = IntPtr.Zero;
-            io.NativePtr->Platform_GetClipboardTextFn = IntPtr.Zero;
+            io.NativePtr->PlatformSetClipboardTextFn = null;
+            io.NativePtr->PlatformGetClipboardTextFn = null;
         }
 
         public void Dispose()

@@ -20,7 +20,7 @@ namespace UBImGui
         
         public static ImGuiController CurrentController { get; private set; }
         public static bool HasController => CurrentController != null;
-        public IntPtr Context { get; private set; }
+        public ImGuiContextPtr Context { get; private set; }
         
         internal ImGuiTextures Textures => _textures;
         internal UBImGuiSettings Settings => _settings;
@@ -40,7 +40,7 @@ namespace UBImGui
             Context = ImGui.CreateContext();
             ImGui.SetCurrentContext(Context);
             
-            if (Context == IntPtr.Zero)
+            if (Context.IsNull)
             {
                 _initialized = false;
                 return;

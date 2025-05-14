@@ -128,7 +128,7 @@ namespace UBImGui
             ImGui.SetCurrentContext(context);
             CopyFrom(ImGui.GetIO());
             
-            if (oldCtx != IntPtr.Zero)
+            if (!oldCtx.IsNull)
                 ImGui.SetCurrentContext(oldCtx);
             
             ImGui.DestroyContext(context);
