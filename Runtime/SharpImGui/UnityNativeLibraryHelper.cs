@@ -9,64 +9,48 @@ namespace SharpImGui
 {
     public static class UnityLibraryHelper
     {
-        // Adiciona caminhos de bibliotecas para a Unity
         public static void SetupUnityPaths()
         {
-            // Configura caminhos baseados no contexto (Editor vs. Build)
             if (Application.isEditor)
-            {
-                // Configurações específicas para o editor
                 ConfigureEditorPaths();
-            }
             else
-            {
-                // Configurações específicas para builds
                 ConfigureBuildPaths();
-            }
             
-            // Registra um manipulador de resolução de caminho personalizado
             LibraryLoader.ResolvePath += CustomUnityPathResolver;
-            
-            // Interceptor para ajustar o nome da biblioteca se necessário
             LibraryLoader.InterceptLibraryName += AdjustLibraryName;
-            
+#if UBIMGUI_DEV_MODE
             Debug.Log($"Unity library paths configured. Running in {(Application.isEditor ? "Editor" : "Build")}");
+#endif
         }
         
-        // Configura caminhos específicos para o Editor
         private static void ConfigureEditorPaths()
         {
-            // Caminhos para pacotes UPM
             string unityPluginsPath = Path.Combine("Packages", "UBImGui", "Runtime", "Plugins");
             LibraryLoader.CustomLoadFolders.Add(unityPluginsPath);
             
-            // Caminhos específicos para plataforma/arquitetura
             string platform = GetPlatformFolderName();
             string architecture = GetArchitectureFolderName();
             
             LibraryLoader.CustomLoadFolders.Add(Path.Combine(unityPluginsPath, "cimgui", platform));
             LibraryLoader.CustomLoadFolders.Add(Path.Combine(unityPluginsPath, "cimgui", platform, architecture));
             
-            // Caminhos em Assets/Plugins
             string assetsPluginsPath = Path.Combine("Assets", "Plugins");
             LibraryLoader.CustomLoadFolders.Add(assetsPluginsPath);
             LibraryLoader.CustomLoadFolders.Add(Path.Combine(assetsPluginsPath, platform));
             LibraryLoader.CustomLoadFolders.Add(Path.Combine(assetsPluginsPath, platform, architecture));
-            
+#if UBIMGUI_DEV_MODE
             Debug.Log($"Editor paths configured: Platform={platform}, Architecture={architecture}");
+#endif
         }
         
-        // Configura caminhos específicos para Builds
         private static void ConfigureBuildPaths()
         {
             string platform = GetPlatformFolderName();
             string architecture = GetCorrectedArchitectureFolderName();
             
-            // 1. Diretório do executável principal
             string executablePath = Application.dataPath;
             LibraryLoader.CustomLoadFolders.Add(executablePath);
             
-            // 2. Diretório de Plugins no build
             string pluginsPath = "";
             
             switch (Application.platform)
@@ -87,31 +71,25 @@ namespace SharpImGui
                     break;
                     
                 case RuntimePlatform.Android:
-                    // Android: utiliza o sistema de carregamento específico de Android
                     pluginsPath = Application.dataPath;
                     break;
                     
                 case RuntimePlatform.IPhonePlayer:
-                    // iOS: A biblioteca nativa estará embutida no aplicativo
                     pluginsPath = Application.dataPath;
                     break;
                     
                 case RuntimePlatform.WebGLPlayer:
-                    // WebGL: O carregamento de bibliotecas nativas funciona diferente
                     pluginsPath = Application.streamingAssetsPath;
                     break;
                     
                 default:
-                    // Fallback para o padrão
                     pluginsPath = Path.Combine(Application.dataPath, "Plugins");
                     break;
             }
             
-            // Adiciona caminhos relacionados a Plugins
             LibraryLoader.CustomLoadFolders.Add(pluginsPath);
             LibraryLoader.CustomLoadFolders.Add(Path.Combine(pluginsPath, architecture));
             
-            // 3. StreamingAssets (para algumas plataformas como Android e WebGL)
             if (Application.platform == RuntimePlatform.Android || 
                 Application.platform == RuntimePlatform.WebGLPlayer ||
                 Application.platform == RuntimePlatform.IPhonePlayer)
@@ -122,38 +100,32 @@ namespace SharpImGui
                 LibraryLoader.CustomLoadFolders.Add(Path.Combine(Application.streamingAssetsPath, "Plugins", platform, architecture));
             }
             
-            // 4. Caminho temporário (para plataformas que extraem bibliotecas)
             if (Application.platform == RuntimePlatform.Android || 
                 Application.platform == RuntimePlatform.WebGLPlayer)
             {
                 string tempPath = Path.Combine(Application.temporaryCachePath, "Plugins");
                 LibraryLoader.CustomLoadFolders.Add(tempPath);
             }
-            
+#if UBIMGUI_DEV_MODE
             Debug.Log($"Build paths configured: Platform={Application.platform}, Path={pluginsPath}");
-            
-            // Log de todos os caminhos registrados
+#endif
             foreach (var path in LibraryLoader.CustomLoadFolders)
             {
                 Debug.Log($"Registered library path: {path}");
             }
         }
         
-        // Manipulador personalizado para resolver caminhos na Unity
         private static void CustomUnityPathResolver(string libraryName, out string? pathToLibrary)
         {
             pathToLibrary = null;
             
-            // Nomes alternativos para tentar (com diferentes prefixos comuns)
             var libraryVariants = new List<string> { 
                 libraryName,
-                $"lib{libraryName}", // comum em plataformas Unix
+                $"lib{libraryName}",
             };
             
-            // Primeiro, vamos tentar os caminhos que já adicionamos ao CustomLoadFolders
             foreach (var path in LibraryLoader.CustomLoadFolders)
             {
-                // Verifica se o diretório existe
                 if (!Directory.Exists(path))
                     continue;
                 
@@ -163,20 +135,18 @@ namespace SharpImGui
                     if (File.Exists(fullPath))
                     {
                         pathToLibrary = fullPath;
-                        Debug.Log($"Biblioteca encontrada: {fullPath}");
+#if UBIMGUI_DEV_MODE
+                        Debug.Log($"Library founded: {fullPath}");
+#endif
                         return;
                     }
                 }
             }
             
-            // Tratamento específico para Android
             if (Application.platform == RuntimePlatform.Android)
             {
-                // Em Android, o sistema carrega automaticamente de lib*.so no APK
-                // mas podemos tentar encontrar em caminhos específicos
                 string androidLibName = $"lib{libraryName.Replace("lib", "")}";
                 
-                // Tenta encontrar nas pastas de bibliotecas nativas Android
                 if (androidLibName.EndsWith(".so"))
                 {
                     pathToLibrary = androidLibName;
@@ -189,32 +159,24 @@ namespace SharpImGui
                 }
             }
             
-            // WebGL precisa de tratamento especial
             if (Application.platform == RuntimePlatform.WebGLPlayer)
             {
-                // No WebGL, bibliotecas são carregadas via JavaScript
-                Debug.LogWarning($"WebGL: Biblioteca nativa {libraryName} pode precisar ser carregada via JavaScript");
+                Debug.LogWarning($"WebGL: Native library {libraryName} needs be loaded by JavaScript");
                 return;
             }
             
-            // Se chegarmos aqui, não encontramos o arquivo
-            Debug.LogWarning($"Não foi possível localizar a biblioteca nativa: {libraryName}");
+            Debug.LogWarning($"It was not possible to locate the native library: {libraryName}");
             
-            // Último recurso: usar o nome original e deixar o sistema tentar resolver
             pathToLibrary = libraryName;
         }
         
-        // Ajusta o nome da biblioteca se necessário
         private static void AdjustLibraryName(ref string libraryName)
         {
-            // Remove extensões se já estiverem presentes
             string nameOnly = Path.GetFileNameWithoutExtension(libraryName);
             
-            // Tratamento específico para diferentes plataformas
             switch (Application.platform)
             {
                 case RuntimePlatform.Android:
-                    // Android geralmente precisa de prefixo "lib"
                     if (!nameOnly.StartsWith("lib"))
                     {
                         libraryName = $"lib{nameOnly}";
@@ -227,20 +189,18 @@ namespace SharpImGui
                     
                 case RuntimePlatform.IPhonePlayer:
                 case RuntimePlatform.OSXPlayer:
-                    // iOS/macOS pode precisar de tratamento especial
                     libraryName = nameOnly;
                     break;
                     
                 default:
-                    // Mantém o nome original para outras plataformas
                     libraryName = nameOnly;
                     break;
             }
-            
+#if UBIMGUI_DEV_MODE
             Debug.Log($"Adjusted library name: {libraryName}");
+#endif
         }
         
-        // Obtém o nome da pasta da plataforma no formato da Unity
         private static string GetPlatformFolderName()
         {
             if (Application.platform == RuntimePlatform.WindowsEditor || 
@@ -262,7 +222,6 @@ namespace SharpImGui
             return "unknown";
         }
         
-        // Obtém o nome da pasta da arquitetura no formato da Unity
         private static string GetArchitectureFolderName()
         {
             return RuntimeInformation.ProcessArchitecture switch
@@ -297,36 +256,38 @@ namespace SharpImGui
         {
             try
             {
-                Debug.Log($"Tentando carregar biblioteca: {libraryName}");
+#if UBIMGUI_DEV_MODE
+                Debug.Log($"Trying to load: {libraryName}");
+#endif
                 
                 var handle = LibraryLoader.LoadLibrary(() => libraryName, null);
                 
                 if (handle != IntPtr.Zero)
                 {
-                    Debug.Log($"Biblioteca '{libraryName}' carregada com sucesso.");
+#if UBIMGUI_DEV_MODE
+                    Debug.Log($"Library '{libraryName}' successful loaded.");
+#endif
                     return handle;
                 }
-                else
-                {
-                    Debug.LogError($"Falha ao carregar biblioteca '{libraryName}': handle é zero");
-                    throw new DllNotFoundException($"Não foi possível carregar a biblioteca '{libraryName}'");
-                }
+
+                Debug.LogError($"Failed on load library '{libraryName}': handle is zero");
+                throw new DllNotFoundException($"Was not possible to load the library '{libraryName}'");
             }
             catch (Exception ex)
             {
-                Debug.LogError($"Erro ao carregar biblioteca '{libraryName}': {ex.Message}\n{ex.StackTrace}");
+                Debug.LogError($"Error on load library '{libraryName}': {ex.Message}\n{ex.StackTrace}");
                 
-                Debug.LogError("Detalhes do ambiente:");
-                Debug.LogError($"  Plataforma: {Application.platform}");
-                Debug.LogError($"  Arquitetura: {RuntimeInformation.ProcessArchitecture}");
-                Debug.LogError($"  Diretório de dados: {Application.dataPath}");
+                Debug.LogError("Details:");
+                Debug.LogError($"  Platform: {Application.platform}");
+                Debug.LogError($"  Architecture: {RuntimeInformation.ProcessArchitecture}");
+                Debug.LogError($"  Data path: {Application.dataPath}");
                 Debug.LogError($"  StreamingAssets: {Application.streamingAssetsPath}");
-                Debug.LogError($"  Diretório temporário: {Application.temporaryCachePath}");
+                Debug.LogError($"  Temp dir: {Application.temporaryCachePath}");
                 
-                Debug.LogError("Caminhos de busca registrados:");
+                Debug.LogError("Registered custom folders:");
                 foreach (var path in LibraryLoader.CustomLoadFolders)
                 {
-                    Debug.LogError($"  {path} (Existe: {Directory.Exists(path)})");
+                    Debug.LogError($"  {path} (Exists: {Directory.Exists(path)})");
                 }
                 
                 throw;

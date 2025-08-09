@@ -101,7 +101,6 @@ namespace UBImGui
             _instance = null;
             _cmd.Dispose();
             _controller.Dispose();
-            ImGuiNative.FreeApi();
 
             if (_renderInFront)
                 return;

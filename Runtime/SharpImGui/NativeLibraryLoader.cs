@@ -1,6 +1,5 @@
 using System;
 
-#if !NET5_0_OR_GREATER
 namespace SharpImGui
 {
     using System.Runtime.InteropServices;
@@ -17,14 +16,14 @@ namespace SharpImGui
         [DllImport("kernel32", EntryPoint = "GetProcAddress", SetLastError = true)]
         private static extern IntPtr GetProcAddressNative(IntPtr hModule, byte* lpProcName);
 
-        // Unix/Linux/Android
-        [DllImport("libdl.so", EntryPoint = "dlopen")]
+        // Linux
+        [DllImport("libdl.so.2", EntryPoint = "dlopen")]
         private static extern IntPtr DLOpenNative(byte* fileName, int flags);
 
-        [DllImport("libdl.so", EntryPoint = "dlclose")]
+        [DllImport("libdl.so.2", EntryPoint = "dlclose")]
         private static extern int DLCloseNative(IntPtr handle);
 
-        [DllImport("libdl.so", EntryPoint = "dlsym")]
+        [DllImport("libdl.so.2", EntryPoint = "dlsym")]
         private static extern IntPtr DLSymNative(IntPtr handle, byte* name);
 
         private const int RTLD_NOW = 2;
@@ -120,4 +119,3 @@ namespace SharpImGui
         }
     }
 }
-#endif

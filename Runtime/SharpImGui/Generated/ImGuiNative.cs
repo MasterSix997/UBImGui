@@ -10,7 +10,13 @@ namespace SharpImGui
 	{
 		static ImGuiNative()
 		{
+			Debug.Log("ImGuiNative static constructor called. Initializing ImGuiNative...");
 			InitApi(new NativeLibraryContext(LibraryLoader.LoadLibrary(GetLibraryName, null)));
+		}
+		
+		~ImGuiNative()
+		{
+			Debug.Log("ImGuiNative destructor called. Freeing ImGuiNative resources...");
 		}
 
 		public static string GetLibraryName()
