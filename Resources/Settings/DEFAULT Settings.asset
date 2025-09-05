@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DEFAULT Settings
   m_EditorClassIdentifier: 
   styleAsset: {fileID: 11400000, guid: add6a5977e6e7704586c563789be44a6, type: 2}
-  fontAsset: {fileID: 0}
+  fontAsset: {fileID: 11400000, guid: e5c3fa9996950f3bebc736ea5a0a4206, type: 2}
   cursorAsset: {fileID: 0}
   renderInFront: 0
   inputMode: 0
@@ -21,7 +21,7 @@ MonoBehaviour:
     KeyboardNavigation: 1
     GamepadNavigation: 0
     NavSetMousePos: 0
-    NavNoCaptureKeyboard: 0
+    NavCaptureKeyboard: 0
     DoubleClickTime: 0.3
     DoubleClickMaxDist: 6
     DragThreshold: 6
@@ -40,11 +40,73 @@ MonoBehaviour:
     DockingAlwaysTabBar: 0
     DockingTransparentPayload: 0
     InputTextEnterKeepActive: 0
-  iniSettings: "[Window][Debug##Default]\nPos=60,60\nSize=400,400\nCollapsed=0\n\n[Window][Dear
-    ImGui Metrics/Debugger]\nPos=240,91\nSize=339,375\nCollapsed=0\n\n[Window][Dear
-    ImGui Demo]\nPos=635,36\nSize=732,292\nCollapsed=0\nDockId=0x00000002,0\n\n[Window][Test
-    Window]\nPos=635,330\nSize=732,252\nCollapsed=0\nDockId=0x00000003,0\n\n[Docking][Data]\nDockNode   
-    ID=0x00000001 Pos=635,36 Size=732,546 Split=Y\n  DockNode  ID=0x00000002 Parent=0x00000001
-    SizeRef=550,364 Selected=0xE87781F4\n  DockNode  ID=0x00000003 Parent=0x00000001
-    SizeRef=550,314 Selected=0x76E46F41\n\n"
-  iniSettingsSize: 534
+  iniSettings: '[Window][Debug##Default]
+
+    Pos=60,60
+
+    Size=400,400
+
+    Collapsed=0
+
+
+    [Window][Dear
+    ImGui Metrics/Debugger]
+
+    Pos=240,91
+
+    Size=339,375
+
+    Collapsed=0
+
+
+    [Window][Dear
+    ImGui Demo]
+
+    Pos=209,52
+
+    Size=549,428
+
+    Collapsed=0
+
+
+    [Window][Test
+    Window]
+
+    Pos=635,330
+
+    Size=732,252
+
+    Collapsed=0
+
+
+    [Window][Example:
+    Console]
+
+    Pos=100,95
+
+    Size=239,428
+
+    Collapsed=0
+
+
+    [Window][Dear
+    ImGui Demo/ResizableChild_478B81A3]
+
+    IsChild=1
+
+    Size=498,160
+
+
+    [Window][Dear
+    ImGui Demo/Red_BEEF922B]
+
+    IsChild=1
+
+    Size=200,100
+
+
+    [Docking][Data]
+
+
+'
+  iniSettingsSize: 477

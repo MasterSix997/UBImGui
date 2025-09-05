@@ -48,6 +48,9 @@ namespace SharpImGui
 			ImGuiNative.SetCurrentContext(ctx);
 		}
 
+		/// <summary>
+		/// access the ImGuiIO structure (mouse/keyboard/gamepad inputs, time, various configuration options/flags)<br/>
+		/// </summary>
 		public static ImGuiIOPtr GetIO()
 		{
 			return ImGuiNative.GetIO();
@@ -19271,48 +19274,6 @@ namespace SharpImGui
 		}
 
 		/// <summary>
-		/// pass text data straight to log (without being displayed)<br/>
-		/// </summary>
-		public static void LogText(ReadOnlySpan<byte> fmt)
-		{
-			fixed (byte* nativeFmt = fmt)
-			{
-				ImGuiNative.LogText(nativeFmt);
-			}
-		}
-
-		/// <summary>
-		/// pass text data straight to log (without being displayed)<br/>
-		/// </summary>
-		public static void LogText(ReadOnlySpan<char> fmt)
-		{
-			// Marshaling fmt to native string
-			byte* nativeFmt;
-			var byteCountFmt = 0;
-			if (fmt != null && !fmt.IsEmpty)
-			{
-				byteCountFmt = Encoding.UTF8.GetByteCount(fmt);
-				if(byteCountFmt > Utils.MaxStackallocSize)
-				{
-					nativeFmt = Utils.Alloc<byte>(byteCountFmt + 1);
-				}
-				else
-				{
-					var stackallocBytes = stackalloc byte[byteCountFmt + 1];
-					nativeFmt = stackallocBytes;
-				}
-				var offsetFmt = Utils.EncodeStringUTF8(fmt, nativeFmt, byteCountFmt);
-				nativeFmt[offsetFmt] = 0;
-			}
-			else nativeFmt = null;
-
-			ImGuiNative.LogText(nativeFmt);
-			// Freeing fmt native string
-			if (byteCountFmt > Utils.MaxStackallocSize)
-				Utils.Free(nativeFmt);
-		}
-
-		/// <summary>
 		/// call after submitting an item which may be dragged. when this return true, you can call SetDragDropPayload() + EndDragDropSource()<br/>
 		/// </summary>
 		public static bool BeginDragDropSource(ImGuiDragDropFlags flags)
@@ -22634,9 +22595,9 @@ namespace SharpImGui
 			ImGuiNative.ImGuiIdStackToolImGuiIdStackToolConstruct(self);
 		}
 
-		public static ImGuiIOPtr GetIO(ImGuiContextPtr ctx)
+		public static ImGuiIOPtr GetIoEx(ImGuiContextPtr ctx)
 		{
-			return ImGuiNative.GetIO(ctx);
+			return ImGuiNative.GetIoEx(ctx);
 		}
 
 		public static ImGuiPlatformIOPtr GetPlatformIO(ImGuiContextPtr ctx)
@@ -26971,6 +26932,48 @@ namespace SharpImGui
 			// Freeing inStr native string
 			if (byteCountInStr > Utils.MaxStackallocSize)
 				Utils.Free(nativeInStr);
+		}
+
+		/// <summary>
+		/// pass text data straight to log (without being displayed)<br/>
+		/// </summary>
+		public static void LogText(ReadOnlySpan<byte> fmt)
+		{
+			fixed (byte* nativeFmt = fmt)
+			{
+				ImGuiNative.LogText(nativeFmt);
+			}
+		}
+
+		/// <summary>
+		/// pass text data straight to log (without being displayed)<br/>
+		/// </summary>
+		public static void LogText(ReadOnlySpan<char> fmt)
+		{
+			// Marshaling fmt to native string
+			byte* nativeFmt;
+			var byteCountFmt = 0;
+			if (fmt != null && !fmt.IsEmpty)
+			{
+				byteCountFmt = Encoding.UTF8.GetByteCount(fmt);
+				if(byteCountFmt > Utils.MaxStackallocSize)
+				{
+					nativeFmt = Utils.Alloc<byte>(byteCountFmt + 1);
+				}
+				else
+				{
+					var stackallocBytes = stackalloc byte[byteCountFmt + 1];
+					nativeFmt = stackallocBytes;
+				}
+				var offsetFmt = Utils.EncodeStringUTF8(fmt, nativeFmt, byteCountFmt);
+				nativeFmt[offsetFmt] = 0;
+			}
+			else nativeFmt = null;
+
+			ImGuiNative.LogText(nativeFmt);
+			// Freeing fmt native string
+			if (byteCountFmt > Utils.MaxStackallocSize)
+				Utils.Free(nativeFmt);
 		}
 
 		public static float GETFLTMAX()

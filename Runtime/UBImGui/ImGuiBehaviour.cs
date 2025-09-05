@@ -67,8 +67,6 @@ namespace UBImGui
                 DestroyImmediate(gameObject);
                 return;
             }
-
-            UnityLibraryHelper.SetupUnityPaths();
             
             _isEnabled = true;
             _cmd = new CommandBuffer { name = "Dear ImGui" };
