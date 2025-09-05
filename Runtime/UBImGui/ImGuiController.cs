@@ -1,5 +1,5 @@
 ﻿using System;
-using ImGuiNET;
+using SharpImGui;
 using UnityEngine;
 
 namespace UBImGui
@@ -20,7 +20,7 @@ namespace UBImGui
         
         public static ImGuiController CurrentController { get; private set; }
         public static bool HasController => CurrentController != null;
-        public IntPtr Context { get; private set; }
+        public ImGuiContextPtr Context { get; private set; }
         
         internal ImGuiTextures Textures => _textures;
         internal UBImGuiSettings Settings => _settings;
@@ -40,13 +40,14 @@ namespace UBImGui
             Context = ImGui.CreateContext();
             ImGui.SetCurrentContext(Context);
             
-            if (Context == IntPtr.Zero)
+            if (Context.IsNull)
             {
                 _initialized = false;
                 return;
             }
             
             var io = ImGui.GetIO();
+            var platformIO = ImGui.GetPlatformIO();
 
             _settings = UBImGuiSettingsPersistent.GetSettings();
             _settings.ApplyTo(ImGui.GetStyle(), io);
@@ -64,7 +65,7 @@ namespace UBImGui
             _textures.BuildFontAtlas(io, _settings.fontAsset);
             _textures.BuildAtlasTexture(io);
             _renderer = new GraphicsBufferRenderer(io, _textures);
-            _clipboardHandler.Assign(io);
+            _clipboardHandler.Assign(platformIO);
 
             if (!_settings.IsTemp)
             {
@@ -72,8 +73,7 @@ namespace UBImGui
                 ImGui.LoadIniSettingsFromMemory(_settings.iniSettings, _settings.iniSettingsSize);
             }
             
-            ImGui.NewFrame();
-            _frameBegun = true;
+            _frameBegun = false;
             _initialized = true;
         }
 
@@ -147,11 +147,11 @@ namespace UBImGui
 
         public void Dispose()
         {
-            var io = ImGui.GetIO();
+            var platformIO = ImGui.GetPlatformIO();
             _inputHandler.Dispose();
             _textures.Dispose();
             _renderer.Dispose();
-            _clipboardHandler.Unset(io);
+            _clipboardHandler.Unset(platformIO);
             _clipboardHandler.Dispose();
             Layout = null;
             ImGui.DestroyContext(Context);

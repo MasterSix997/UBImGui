@@ -1,5 +1,5 @@
 ﻿using System;
-using ImGuiNET;
+using SharpImGui;
 using UnityEngine;
 
 namespace UBImGui

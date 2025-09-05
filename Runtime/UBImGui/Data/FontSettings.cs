@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using ImGuiNET;
+using SharpImGui;
 using UnityEngine;
 
 namespace UBImGui
@@ -21,21 +21,21 @@ namespace UBImGui
             var atlas = (ImFontAtlas*)0;
             var ranges = new List<ushort>();
             if ((glyphRanges & ScriptGlyphRanges.Default) != 0)
-                AddRangePtr(ImGuiNative.ImFontAtlas_GetGlyphRangesDefault(atlas));
+                AddRangePtr(ImGuiNative.ImFontAtlasGetGlyphRangesDefault(atlas));
             if ((glyphRanges & ScriptGlyphRanges.Cyrillic) != 0)
-                AddRangePtr(ImGuiNative.ImFontAtlas_GetGlyphRangesCyrillic(atlas));
+                AddRangePtr(ImGuiNative.ImFontAtlasGetGlyphRangesCyrillic(atlas));
             if ((glyphRanges & ScriptGlyphRanges.Japanese) != 0)
-                AddRangePtr(ImGuiNative.ImFontAtlas_GetGlyphRangesJapanese(atlas));
+                AddRangePtr(ImGuiNative.ImFontAtlasGetGlyphRangesJapanese(atlas));
             if ((glyphRanges & ScriptGlyphRanges.Korean) != 0)
-                AddRangePtr(ImGuiNative.ImFontAtlas_GetGlyphRangesKorean(atlas));
+                AddRangePtr(ImGuiNative.ImFontAtlasGetGlyphRangesKorean(atlas));
             if ((glyphRanges & ScriptGlyphRanges.Thai) != 0)
-                AddRangePtr(ImGuiNative.ImFontAtlas_GetGlyphRangesThai(atlas));
+                AddRangePtr(ImGuiNative.ImFontAtlasGetGlyphRangesThai(atlas));
             if ((glyphRanges & ScriptGlyphRanges.Vietnamese) != 0)
-                AddRangePtr(ImGuiNative.ImFontAtlas_GetGlyphRangesVietnamese(atlas));
+                AddRangePtr(ImGuiNative.ImFontAtlasGetGlyphRangesVietnamese(atlas));
             if ((glyphRanges & ScriptGlyphRanges.ChineseSimplified) != 0)
-                AddRangePtr(ImGuiNative.ImFontAtlas_GetGlyphRangesChineseSimplifiedCommon(atlas));
+                AddRangePtr(ImGuiNative.ImFontAtlasGetGlyphRangesChineseSimplifiedCommon(atlas));
             if ((glyphRanges & ScriptGlyphRanges.ChineseFull) != 0)
-                AddRangePtr(ImGuiNative.ImFontAtlas_GetGlyphRangesChineseFull(atlas));
+                AddRangePtr(ImGuiNative.ImFontAtlasGetGlyphRangesChineseFull(atlas));
             if ((glyphRanges & ScriptGlyphRanges.Custom) != 0)
                 foreach (var range in customGlyphRanges)
                     ranges.AddRange(new[] { range.start, range.end });

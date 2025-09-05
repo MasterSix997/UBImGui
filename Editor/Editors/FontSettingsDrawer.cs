@@ -7,7 +7,7 @@ namespace UBImGui.Editor
     [CustomPropertyDrawer(typeof(FontSettings))]
     public class FontSettingsDrawer : PropertyDrawer
     {
-        const string EditorStreamingAssetsPath = "Assets/StreamingAssets/";
+        private const string EditorStreamingAssetsPath = "Assets/StreamingAssets/";
         
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
@@ -25,7 +25,7 @@ namespace UBImGui.Editor
             objectField.BindProperty(fontObjectProperty);
             
             var pathLabel = new Label($"{EditorStreamingAssetsPath}{fontPathProperty.stringValue}");
-            pathLabel.AddToClassList(InspectorElement.disabledUssClassName);
+            pathLabel.AddToClassList(VisualElement.disabledUssClassName);
 
             var invalidPath = new HelpBox($"Font file must be in '{EditorStreamingAssetsPath}' folder.", HelpBoxMessageType.Error);
             invalidPath.style.display = DisplayStyle.None;
@@ -60,10 +60,10 @@ namespace UBImGui.Editor
         
         private string GetStreamingAssetPath(SerializedProperty property)
         {
-            string path = property.objectReferenceValue != null
+            var path = property.objectReferenceValue
                 ? AssetDatabase.GetAssetPath(property.objectReferenceValue.GetInstanceID())
                 : string.Empty;
-            return path.StartsWith(EditorStreamingAssetsPath) ? path.Substring(EditorStreamingAssetsPath.Length) : string.Empty;
+            return path.StartsWith(EditorStreamingAssetsPath) ? path[EditorStreamingAssetsPath.Length..] : string.Empty;
         }
     }
 }

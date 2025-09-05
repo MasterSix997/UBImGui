@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using ImGuiNET;
+using SharpImGui;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -127,9 +127,9 @@ namespace UBImGui
                 >= KeyCode.F1 and <= KeyCode.F15 => ImGuiKey.F1 + (keyCode - KeyCode.F1),
                 KeyCode.Numlock => ImGuiKey.NumLock,
                 KeyCode.ScrollLock => ImGuiKey.ScrollLock,
-                KeyCode.LeftShift => ImGuiKey.ModShift,
-                KeyCode.LeftControl => ImGuiKey.ModCtrl,
-                KeyCode.LeftAlt => ImGuiKey.ModAlt,
+                KeyCode.LeftShift => ImGuiKey.ImGuiModShift,
+                KeyCode.LeftControl => ImGuiKey.ImGuiModCtrl,
+                KeyCode.LeftAlt => ImGuiKey.ImGuiModAlt,
                 KeyCode.Semicolon => ImGuiKey.Semicolon,
                 KeyCode.Equals => ImGuiKey.Equal,
                 KeyCode.Comma => ImGuiKey.Comma,

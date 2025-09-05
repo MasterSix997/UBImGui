@@ -1,5 +1,5 @@
 ﻿using System;
-using ImGuiNET;
+using SharpImGui;
 using UnityEngine;
 
 namespace UBImGui
@@ -14,8 +14,8 @@ namespace UBImGui
         [Tooltip("Instruct navigation to move the move the mouse cursor.")]
         public bool NavSetMousePos;
 
-        [Tooltip("Instruct navigation to not set the io.WantCaptureKeyboard when io.NavActive is set.")]
-        public bool NavNoCaptureKeyboard;
+        [Tooltip("Instruct navigation to set the io.WantCaptureKeyboard when io.NavActive is set.")]
+        public bool NavCaptureKeyboard;
 
         [Tooltip("Time for a double-click, in seconds.")]
         public float DoubleClickTime;
@@ -72,8 +72,6 @@ namespace UBImGui
         {
             io.ConfigFlags = KeyboardNavigation ? io.ConfigFlags | ImGuiConfigFlags.NavEnableKeyboard : io.ConfigFlags & ~ImGuiConfigFlags.NavEnableKeyboard;
             io.ConfigFlags = GamepadNavigation ? io.ConfigFlags | ImGuiConfigFlags.NavEnableGamepad : io.ConfigFlags & ~ImGuiConfigFlags.NavEnableGamepad;
-            io.ConfigFlags = NavSetMousePos ? io.ConfigFlags | ImGuiConfigFlags.NavEnableSetMousePos : io.ConfigFlags & ~ImGuiConfigFlags.NavEnableSetMousePos;
-            io.ConfigFlags = NavNoCaptureKeyboard ? io.ConfigFlags | ImGuiConfigFlags.NavNoCaptureKeyboard : io.ConfigFlags & ~ImGuiConfigFlags.NavNoCaptureKeyboard;
             io.MouseDoubleClickTime = DoubleClickTime;
             io.MouseDoubleClickMaxDist = DoubleClickMaxDist;
             io.MouseDragThreshold = DragThreshold;
@@ -85,7 +83,8 @@ namespace UBImGui
             io.ConfigWindowsResizeFromEdges = ResizeFromEdges;
             io.ConfigWindowsMoveFromTitleBarOnly = MoveFromTitleOnly;
             io.ConfigMemoryCompactTimer = MemoryCompactTimer;
-            
+            io.ConfigNavMoveSetMousePos = NavSetMousePos;
+            io.ConfigNavCaptureKeyboard = NavCaptureKeyboard;
             io.IniSavingRate = IniSavingRate;
             io.ConfigFlags = DockingEnable ? io.ConfigFlags | ImGuiConfigFlags.DockingEnable : io.ConfigFlags & ~ImGuiConfigFlags.DockingEnable;
             io.ConfigDockingNoSplit = DockingNoSplit;
@@ -99,8 +98,8 @@ namespace UBImGui
         {
             KeyboardNavigation = (io.ConfigFlags & ImGuiConfigFlags.NavEnableKeyboard) != 0;
             GamepadNavigation = (io.ConfigFlags & ImGuiConfigFlags.NavEnableGamepad) != 0;
-            NavSetMousePos = (io.ConfigFlags & ImGuiConfigFlags.NavEnableSetMousePos) != 0;
-            NavNoCaptureKeyboard = (io.ConfigFlags & ImGuiConfigFlags.NavNoCaptureKeyboard) != 0;
+            NavSetMousePos = io.ConfigNavMoveSetMousePos;
+            NavCaptureKeyboard = io.ConfigNavCaptureKeyboard;
             DoubleClickTime = io.MouseDoubleClickTime;
             DoubleClickMaxDist = io.MouseDoubleClickMaxDist;
             DragThreshold = io.MouseDragThreshold;
@@ -129,7 +128,7 @@ namespace UBImGui
             ImGui.SetCurrentContext(context);
             CopyFrom(ImGui.GetIO());
             
-            if (oldCtx != IntPtr.Zero)
+            if (!oldCtx.IsNull)
                 ImGui.SetCurrentContext(oldCtx);
             
             ImGui.DestroyContext(context);

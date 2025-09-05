@@ -1,5 +1,5 @@
 ﻿using System;
-using ImGuiNET;
+using SharpImGui;
 using UnityEngine;
 
 namespace UBImGui
@@ -93,7 +93,6 @@ namespace UBImGui
             style.LogSliderDeadzone = LogSliderDeadzone;
             style.TabRounding = TabRounding;
             style.TabBorderSize = TabBorderSize;
-            style.TabMinWidthForCloseButton = TabMinWidthForCloseButton;
             style.TabBarBorderSize = TabBarBorderSize;
             style.TabBarOverlineSize = TabBarOverlineSize;
             style.TableAngledHeadersAngle = TableAngledHeadersAngle;
@@ -154,7 +153,6 @@ namespace UBImGui
             LogSliderDeadzone = style.LogSliderDeadzone;
             TabRounding = style.TabRounding;
             TabBorderSize = style.TabBorderSize;
-            TabMinWidthForCloseButton = style.TabMinWidthForCloseButton;
             TabBarBorderSize = style.TabBarBorderSize;
             TabBarOverlineSize = style.TabBarOverlineSize;
             TableAngledHeadersAngle = style.TableAngledHeadersAngle;
@@ -190,7 +188,7 @@ namespace UBImGui
             ImGui.SetCurrentContext(context);
             CopyFrom(ImGui.GetStyle());
             
-            if (oldCtx != IntPtr.Zero)
+            if (!oldCtx.IsNull)
                 ImGui.SetCurrentContext(oldCtx);
             
             ImGui.DestroyContext(context);

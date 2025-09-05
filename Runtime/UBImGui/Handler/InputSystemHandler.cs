@@ -1,7 +1,7 @@
 ﻿#if PACKAGE_INPUT_SYSTEM
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using ImGuiNET;
+using SharpImGui;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -178,9 +178,9 @@ namespace UBImGui
                 >= Key.F1 and <= Key.F12 => ImGuiKey.F1 + (inputKey - Key.F1),
                 Key.NumLock => ImGuiKey.NumLock,
                 Key.ScrollLock => ImGuiKey.ScrollLock,
-                Key.LeftShift => ImGuiKey.ModShift,
-                Key.LeftCtrl => ImGuiKey.ModCtrl,
-                Key.LeftAlt => ImGuiKey.ModAlt,
+                Key.LeftShift => ImGuiKey.ImGuiModShift,
+                Key.LeftCtrl => ImGuiKey.ImGuiModCtrl,
+                Key.LeftAlt => ImGuiKey.ImGuiModAlt,
                 Key.Semicolon => ImGuiKey.Semicolon,
                 Key.Equals => ImGuiKey.Equal,
                 Key.Comma => ImGuiKey.Comma,

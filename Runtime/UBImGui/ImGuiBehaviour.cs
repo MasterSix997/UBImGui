@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using SharpImGui;
 using UnityEngine;
 using UnityEngine.Rendering;
 #if PACKAGE_UNIVERSAL_RP
@@ -45,7 +47,9 @@ namespace UBImGui
 
             var gameObj = new GameObject("ImGuiBehaviour")
             {
+#if !UBIMGUI_DEV_MODE
                 hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector | HideFlags.NotEditable
+#endif
             };
             
             _instance = gameObj.AddComponent<ImGuiBehaviour>();

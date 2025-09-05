@@ -2,57 +2,49 @@
 using System.Runtime.InteropServices;
 using System.Text;
 using AOT;
-using ImGuiNET;
+using SharpImGui;
 using UnityEngine;
 
 namespace UBImGui
 {
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate string GetClipboardTextCallback(void* userData);
-        
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void SetClipboardTextCallback(void* userData, byte* text);
-    
     public unsafe class ClipboardHandler : IDisposable
     {
-        public ClipboardHandler()
-        {
-            _getClipboardText = GetClipboardTextCallback;
-            _setClipboardText = SetClipboardTextCallback;
-        }
+        // Store bytes to free later
+        private static byte* _lastClipboardText = null;
         
-        private static GetClipboardTextCallback _getClipboardText;
-        private static SetClipboardTextCallback _setClipboardText;
-
-        [MonoPInvokeCallback(typeof(GetClipboardTextCallback))]
-        private static string GetClipboardTextCallback(void* userData)
+        [MonoPInvokeCallback(typeof(PlatformGetClipboardTextFn))]
+        private static byte* GetClipboardTextCallback(ImGuiContext* ctx)
         {
-            return GUIUtility.systemCopyBuffer;
+            _lastClipboardText = PtrFromString(GUIUtility.systemCopyBuffer);
+            return _lastClipboardText;
         }
 
-        [MonoPInvokeCallback(typeof(SetClipboardTextCallback))]
-        private static void SetClipboardTextCallback(void* userData, byte* text)
+        [MonoPInvokeCallback(typeof(PlatformGetClipboardTextFn))]
+        private static void SetClipboardTextCallback(ImGuiContext* ctx, byte* text)
         {
             GUIUtility.systemCopyBuffer = StringFromPtr(text);
         }
         
-        public void Assign(ImGuiIOPtr io)
+        public void Assign(ImGuiPlatformIOPtr io)
         {
-            io.ClipboardUserData = IntPtr.Zero;
-            io.SetClipboardTextFn = Marshal.GetFunctionPointerForDelegate(_setClipboardText);
-            io.GetClipboardTextFn = Marshal.GetFunctionPointerForDelegate(_getClipboardText);
+            io.PlatformClipboardUserData = IntPtr.Zero;
+            io.PlatformSetClipboardTextFn = SetClipboardTextCallback;
+            io.PlatformGetClipboardTextFn = GetClipboardTextCallback;
         }
 
-        public void Unset(ImGuiIOPtr io)
+        public void Unset(ImGuiPlatformIOPtr io)
         {
-            io.SetClipboardTextFn = IntPtr.Zero;
-            io.GetClipboardTextFn = IntPtr.Zero;
+            io.NativePtr->PlatformSetClipboardTextFn = null;
+            io.NativePtr->PlatformGetClipboardTextFn = null;
         }
 
         public void Dispose()
         {
-            _getClipboardText = null;
-            _setClipboardText = null;
+            if (_lastClipboardText != null)
+            {
+                Marshal.FreeHGlobal(new IntPtr(_lastClipboardText));
+                _lastClipboardText = null;
+            }
         }
         
         private static string StringFromPtr(byte* ptr)
@@ -65,23 +57,16 @@ namespace UBImGui
             return Encoding.UTF8.GetString(ptr, length);
         }
         
-        // Exposição simplificada para definir as funções de clipboard de forma segura com IntPtr
-        // public static GetClipboardTextSafeCallback GetClipboardText
-        // {
-        //     set => _getClipboardText = (userData) =>
-        //     {
-        //         try { return value(new IntPtr(userData)); }
-        //         catch (Exception ex) { Debug.LogException(ex); return null; }
-        //     };
-        // }
-        //
-        // public static SetClipboardTextSafeCallback SetClipboardText
-        // {
-        //     set => _setClipboardText = (userData, text) =>
-        //     {
-        //         try { value(new IntPtr(userData), StringFromPtr(text)); }
-        //         catch (Exception ex) { Debug.LogException(ex); }
-        //     };
-        // }
+        private static byte* PtrFromString(string str)
+        {
+            if (string.IsNullOrEmpty(str))
+                return null;
+            
+            var bytes = Encoding.UTF8.GetBytes(str);
+            var ptr = (byte*)Marshal.AllocHGlobal(bytes.Length + 1);
+            Marshal.Copy(bytes, 0, new IntPtr(ptr), bytes.Length);
+            ptr[bytes.Length] = 0;
+            return ptr;
+        }
     }
 }

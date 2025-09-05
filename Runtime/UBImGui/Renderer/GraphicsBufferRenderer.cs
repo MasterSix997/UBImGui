@@ -1,4 +1,4 @@
-﻿using ImGuiNET;
+﻿using SharpImGui;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
@@ -77,7 +77,7 @@ namespace UBImGui
 
         public void Render(in CommandBufferWrapper cmd, ImDrawDataPtr drawData, Vector2 frameBufferSize)
         {
-            var prevTextureId = System.IntPtr.Zero;
+            var prevTextureId = (ulong)0;
             var clipOffset = new Vector4(drawData.DisplayPos.x, drawData.DisplayPos.y, drawData.DisplayPos.x, drawData.DisplayPos.y);
             var clipScale = new Vector4(drawData.FramebufferScale.x, drawData.FramebufferScale.y, drawData.FramebufferScale.x, drawData.FramebufferScale.y);
 
