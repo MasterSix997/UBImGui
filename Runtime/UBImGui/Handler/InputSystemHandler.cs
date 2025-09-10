@@ -69,7 +69,7 @@ namespace UBImGui
 
             if (io.WantSetMousePos)
             {
-                mouse.WarpCursorPosition(IInputHandler.ImGuiToScreen(new Vector2(Input.mousePosition.x, Input.mousePosition.y), MouseOffset););
+                mouse.WarpCursorPosition(IInputHandler.ImGuiToScreen(new Vector2(Input.mousePosition.x, Input.mousePosition.y), MouseOffset));
                 io.WantSetMousePos = false;
             }
             
