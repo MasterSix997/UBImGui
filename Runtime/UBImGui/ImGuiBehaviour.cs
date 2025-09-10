@@ -23,7 +23,7 @@ namespace UBImGui
             HDRP
         }
         
-        private static ImGuiBehaviour _instance;
+        static ImGuiBehaviour _instance;
 
         private ImGuiController _controller;
         private CommandBuffer _cmd;
@@ -35,6 +35,8 @@ namespace UBImGui
 #if PACKAGE_UNIVERSAL_RP
         private DearImGuiRenderPassFeature _renderPassFeature;
 #endif
+
+        public static bool IsRenderingInFront => _instance._renderInFront;
         
         public static void Initialize()
         {
@@ -72,7 +74,6 @@ namespace UBImGui
             CreateImGuiCamera();
             _controller = new ImGuiController(_imguiCamera);
             _controller.MakeCurrent();
-            _controller.BaseCamera = Camera.main;
             _renderInFront = _controller.Settings.renderInFront;
 
             if (_renderInFront)
@@ -171,7 +172,7 @@ namespace UBImGui
             _imguiCamera.farClipPlane = 1;
             
             _imguiCamera.rect = new Rect(0, 0, 1, 1);
-            _imguiCamera.depth = float.MaxValue;
+            _imguiCamera.depth = 100;
             
 #if PACKAGE_UNIVERSAL_RP
             var urpData = _imguiCamera.GetUniversalAdditionalCameraData();
@@ -180,8 +181,8 @@ namespace UBImGui
             urpData.renderShadows = false;
             urpData.requiresColorOption = CameraOverrideOption.Off;
             urpData.requiresDepthOption = CameraOverrideOption.Off;
-            urpData.renderType = CameraRenderType.Overlay;
-            AddToMainCameraStack();
+            // urpData.renderType = CameraRenderType.Overlay;
+            // AddToMainCameraStack();
 #endif
         }
         

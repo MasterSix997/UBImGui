@@ -15,15 +15,15 @@ namespace UBImGui
         void IDisposable.Dispose() { }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static Vector2 ScreenToImGui(in Vector2 point, in Vector2 offset = default)
+        internal static Vector2 ScreenToImGui(in Vector2 point)
         {
-            return new Vector2(point.x, ImGui.GetIO().DisplaySize.y - point.y) + offset;
+            return new Vector2(point.x, ImGui.GetIO().DisplaySize.y - point.y);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static Vector2 ImGuiToScreen(in Vector2 point, in Vector2 offset = default)
+        internal static Vector2 ImGuiToScreen(in Vector2 point)
         {
-            return new Vector2(point.x, ImGui.GetIO().DisplaySize.y - point.y) + offset;
+            return new Vector2(point.x, ImGui.GetIO().DisplaySize.y - point.y);
         }
     }
 }
