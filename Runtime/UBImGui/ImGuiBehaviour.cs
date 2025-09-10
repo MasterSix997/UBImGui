@@ -29,6 +29,7 @@ namespace UBImGui
         private CommandBuffer _cmd;
         private bool _isEnabled;
         private bool _renderInFront;
+        private Camera _imguiCamera;
         
         private RenderPipelineOption _currentRenderPipeline = RenderPipelineOption.BuiltIn;
 #if PACKAGE_UNIVERSAL_RP
@@ -45,7 +46,9 @@ namespace UBImGui
 
             var gameObj = new GameObject("ImGuiBehaviour")
             {
-                hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector | HideFlags.NotEditable
+#if !UBIMGUI_DEV_MODE
+                hideFlags = HideFlags.NotEditable | HideFlags.HideInHierarchy | HideFlags.HideInInspector
+#endif
             };
             
             _instance = gameObj.AddComponent<ImGuiBehaviour>();
@@ -66,7 +69,8 @@ namespace UBImGui
             
             _isEnabled = true;
             _cmd = new CommandBuffer { name = "Dear ImGui" };
-            _controller = new ImGuiController(Camera.main);
+            CreateImGuiCamera();
+            _controller = new ImGuiController(_imguiCamera);
             _controller.MakeCurrent();
             _renderInFront = _controller.Settings.renderInFront;
 
@@ -109,6 +113,7 @@ namespace UBImGui
             RenderPipelineManager.endCameraRendering -= EndCameraRendering;
             
 #if PACKAGE_UNIVERSAL_RP
+            AddToMainCameraStack();
             if (_renderPassFeature != null) 
             {
                 DestroyImmediate(_renderPassFeature);
@@ -150,6 +155,66 @@ namespace UBImGui
 #endif
             _currentRenderPipeline = pipelineType != null ? RenderPipelineOption.Custom : RenderPipelineOption.BuiltIn;
         }
+        
+        private void CreateImGuiCamera()
+        {
+            var cameraObj = new GameObject("ImGui Camera");
+            cameraObj.transform.SetParent(transform);
+
+            _imguiCamera = cameraObj.AddComponent<Camera>();
+            _imguiCamera.clearFlags = CameraClearFlags.Nothing;
+            _imguiCamera.cullingMask = 0; // Not render any geometry
+            _imguiCamera.orthographic = true;
+            _imguiCamera.orthographicSize = 1;
+            _imguiCamera.nearClipPlane = -1;
+            _imguiCamera.farClipPlane = 1;
+            
+            _imguiCamera.rect = new Rect(0, 0, 1, 1);
+            _imguiCamera.depth = float.MaxValue;
+            
+#if PACKAGE_UNIVERSAL_RP
+            var urpData = _imguiCamera.GetUniversalAdditionalCameraData();
+            if (!urpData) return;
+            urpData.renderPostProcessing = false;
+            urpData.renderShadows = false;
+            urpData.requiresColorOption = CameraOverrideOption.Off;
+            urpData.requiresDepthOption = CameraOverrideOption.Off;
+            urpData.renderType = CameraRenderType.Overlay;
+            AddToMainCameraStack();
+#endif
+        }
+        
+#if PACKAGE_UNIVERSAL_RP
+        private void AddToMainCameraStack()
+        {
+            var mainCamera = Camera.main;
+            if (!mainCamera) return;
+
+            var mainCameraData = mainCamera.GetUniversalAdditionalCameraData();
+            if (!mainCameraData) return;
+
+            var cameraStack = mainCameraData.cameraStack;
+            if (!cameraStack.Contains(_imguiCamera))
+            {
+                cameraStack.Add(_imguiCamera);
+            }
+        }
+
+        private void RemoveFromMainCameraStack()
+        {
+            var mainCamera = Camera.main;
+            if (!mainCamera) return;
+
+            var mainCameraData = mainCamera.GetUniversalAdditionalCameraData();
+            if (!mainCameraData) return;
+
+            var cameraStack = mainCameraData.cameraStack;
+            if (cameraStack.Contains(_imguiCamera))
+            {
+                cameraStack.Remove(_imguiCamera);
+            }
+        }
+#endif
         
         private void Update()
         {
