@@ -1,5 +1,6 @@
 ﻿using System;
 using ImGuiNET;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace UBImGui
@@ -13,11 +14,13 @@ namespace UBImGui
         private readonly ImGuiTextures _textures;
         private readonly ClipboardHandler _clipboardHandler;
         private UBImGuiSettings _settings;
+        [CanBeNull] public Camera BaseCamera;
         private Camera _camera;
         private bool _initialized;
         
         internal event Action Layout;
-        
+
+        public IInputHandler InputHandler => _inputHandler;
         public static ImGuiController CurrentController { get; private set; }
         public static bool HasController => CurrentController != null;
         public IntPtr Context { get; private set; }
@@ -110,6 +113,17 @@ namespace UBImGui
                 _settings.iniSettings = ImGui.SaveIniSettingsToMemory(out var size);
                 _settings.iniSettingsSize = size;
                 io.WantSaveIniSettings = false;
+            }
+
+            if (BaseCamera && BaseCamera.rect != new Rect(0, 0, 1, 1))
+            {
+                var rect = BaseCamera.rect;
+                var screenWidth = _camera.pixelWidth;
+                var screenHeight = _camera.pixelHeight;
+
+                var offsetX = rect.x * screenWidth;
+                var offsetY = rect.y * screenHeight;
+                _inputHandler.MouseOffset = new Vector2(-offsetX, -offsetY);
             }
         }
 

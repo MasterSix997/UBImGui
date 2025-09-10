@@ -72,6 +72,7 @@ namespace UBImGui
             CreateImGuiCamera();
             _controller = new ImGuiController(_imguiCamera);
             _controller.MakeCurrent();
+            _controller.BaseCamera = Camera.main;
             _renderInFront = _controller.Settings.renderInFront;
 
             if (_renderInFront)

@@ -13,6 +13,7 @@ namespace UBImGui
         private ImGuiMouseCursor _lastCursor = ImGuiMouseCursor.None;
         private readonly ImGuiCursorAsset _cursorAsset;
         private Keyboard _keyboard;
+        public Vector2 MouseOffset { get; set; } = Vector2.zero;
 
         public InputSystemHandler(ImGuiCursorAsset cursorAsset = null)
         {
@@ -68,11 +69,11 @@ namespace UBImGui
 
             if (io.WantSetMousePos)
             {
-                mouse.WarpCursorPosition(ImGuiToScreen(new Vector2(io.MousePos.x, io.MousePos.y)));
+                mouse.WarpCursorPosition(IInputHandler.ImGuiToScreen(new Vector2(Input.mousePosition.x, Input.mousePosition.y), MouseOffset););
                 io.WantSetMousePos = false;
             }
             
-            var mousePos = ScreenToImGui(mouse.position.ReadValue());
+            var mousePos = IInputHandler.ScreenToImGui(new Vector2(Input.mousePosition.x, Input.mousePosition.y), MouseOffset);
             io.AddMousePosEvent(mousePos.x, mousePos.y);
             io.AddMouseButtonEvent(0, mouse.leftButton.isPressed);
             io.AddMouseButtonEvent(1, mouse.rightButton.isPressed);
@@ -198,18 +199,6 @@ namespace UBImGui
             };
 
             return key != ImGuiKey.None;
-        }
-        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static Vector2 ScreenToImGui(in Vector2 point)
-        {
-            return new Vector2(point.x, ImGui.GetIO().DisplaySize.y - point.y);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static Vector2 ImGuiToScreen(in Vector2 point)
-        {
-            return new Vector2(point.x, ImGui.GetIO().DisplaySize.y - point.y);
         }
 
         public void Dispose()
